@@ -1,2 +1,4 @@
 Variant_*.qs
 Variant_*.gif
+.DS_Store
+.gitignore
