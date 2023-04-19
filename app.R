@@ -410,13 +410,19 @@ server <- function(input, output, session) {
     
     # switch base polygon depending on number of participants per item
     # commune when more than 2000, otherwise canton
-    if(nrow(longer_google_df) <= 3000) {
+    if(nrow(longer_google_df) <= 2200) {
       geo_type <- "Kanton"
     } else {
       geo_type <- "Gemeng"
     }
     
     longer_google_df <- longer_google_df %>%
+      # recode Alter into 3 categories
+      mutate(Alter = case_match(Alter, c("≤ 24", "25 bis 34") ~ "jonk",
+            c("35 bis 44", "45 bis 54") ~ "mëttel-al",
+            c("55 bis 64", "65+") ~ "eeler")
+      ) %>%
+      mutate(Alter = factor(Alter, levels = c("eeler", "mëttel-al", "jonk"))) %>%
       pivot_longer(cols = geo_type,
                    names_to = "geo_type",
                    values_to = "geo_name") %>%
@@ -442,8 +448,6 @@ server <- function(input, output, session) {
     variants_total <- variants_total %>%
       mutate(weighted_freq = freq * (Awunnerzuel/ 601400))
     
-    #print((variants_total))    
-    
     color <- color_palette
     color_column <- tribble(~variants, ~color,
                             selection()[1], color[1],
@@ -467,10 +471,7 @@ server <- function(input, output, session) {
     returnList_dyn
   })
   
-  ####################################
-  # infoBox for overview of variable #
-  ####################################
-  
+### infoBox for overview of variable
   output$variable <- renderInfoBox({
     infoBox(
       title = paste0("Phenomeen aus dem Beräich '", variables %>% filter(variable == variable()) %>% dplyr::select(map_category), "'"),
@@ -508,8 +509,7 @@ server <- function(input, output, session) {
   
   ######################
   ### Iwwerbléckskaart #
-  ######################
-  
+
   output$Iwwerbléckskaart <- renderGirafe({
     
     lsa_map_number <- variables %>% filter(variable == variable()) %>% pull(lsa_map_number) %>% as.character()
@@ -520,8 +520,8 @@ server <- function(input, output, session) {
     # pull item text from tribble
     item_text <- variables %>% filter(variable == variable()) %>% pull(item_text) %>% as.character()
     
-    if(file.exists(paste0(variable(), "_Iwwerbleckskaart.qs"))) {
-      qread(paste0(variable(), "_Iwwerbleckskaart.qs"))
+    if(file.exists(paste0("Iwwerbleckskaart_", variable(), ".qs"))) {
+      qread(paste0("Iwwerbleckskaart_", variable(), ".qs"))
     }
     else {
       print(paste(variable(),": Iwwerbléckskaart gëtt generéiert"))
@@ -544,8 +544,8 @@ server <- function(input, output, session) {
     # pull item text from tribble
     item_text <- variables %>% filter(variable == variable()) %>% pull(item_text) %>% as.character()
     
-    if(file.exists(paste0(variable(), "_Iwwerbleckskaarten_Alter.qs"))) {
-      qread(paste0(variable(), "_Iwwerbleckskaarten_Alter.qs"))
+    if(file.exists(paste0("Iwwerbleckskaarten_Alter_", variable(), ".qs"))) {
+      qread(paste0("Iwwerbleckskaarten_Alter_", variable(), ".qs"))
     }
     else {
       print(paste(variable(),": Eenzel Alterskaaarten gi generéiert"))
@@ -568,10 +568,10 @@ server <- function(input, output, session) {
     # pull item text from tribble
     item_text <- variables %>% filter(variable == variable()) %>% pull(item_text) %>% as.character()
     
-    if(file.exists(paste0(variable(), "_Iwwerbleckskaart_age.gif"))) {
+    if(file.exists(paste0("Iwwerbleckskaart_age_animation_", variable(), ".gif"))) {
       # get a list containing the filename
       # this can be displayed then with imageOutput
-      list(src = paste0(variable(), "_Iwwerbleckskaart_age.gif"), contentType = "image/gif")
+      list(src = paste0("Iwwerbleckskaart_age_animation_", variable(), ".gif"), contentType = "image/gif")
     }
     else {
       print(paste(variable(),": GIF gëtt generéiert"))
@@ -608,16 +608,16 @@ server <- function(input, output, session) {
       
       # save map as qs
       print("saving Variantekaarten")
-      qsave(p, file = paste0(variable(), "_Variantekaarten.qs"))
+      qsave(p, file = paste0("Variantekaarten_", variable(), ".qs"))
       
       #ggsave(plot = p, filename = paste0("variantekaart_", ".pdf"), units = "cm", width = 22)
       return(p)
     }
     
     # if qs file already exist, display it (faster); if not, create the map (slower)
-    if(file.exists(paste0(variable(), "_Variantekaarten.qs"))) {
+    if(file.exists(paste0("Variantekaarten_", variable(), ".qs"))) {
       print("lokal Variantekaarten")
-      qread(paste0(variable(), "_Variantekaarten.qs"))
+      qread(paste0("Variantekaarten_", variable(), ".qs"))
     }
     else {
       print(paste(variable(),": Varianteaarte gi generéiert"))
@@ -651,7 +651,6 @@ server <- function(input, output, session) {
       dev.off()
     }
   )
-  
   
   output$plotAlter <- renderPlot({
     
@@ -796,9 +795,9 @@ server <- function(input, output, session) {
                               variable, Item = item_number, `LSA-Kaart` = lsa_map_number) %>%
                 # Links for bookmarks
                 # shinyapps
-                mutate(Variabel = paste0("<a href=https://petergill.shinyapps.io/variatiounsatlas/?_inputs_&sidebarid=%22kaartekomplexer%22&variable=%22", variable, "%22>", Variabel, "</a>")) %>%
+                mutate(Variabel = paste0("<a href=", SERVER, "?_inputs_&sidebarid=%22kaartekomplexer%22&variable=%22", variable, "%22>", Variabel, "</a>")) %>%
                 # engelmann
-                # mutate(Variabel = paste0("<a href=http://10.244.2.18:3838/variatiounsatlas/?_inputs_&sidebarid=%22kaartekomplexer%22&variable=%22", variable, "%22>", Variabel, "</a>")) %>%
+                # mutate(Variabel = paste0("<a href=", SERVER_local, "?_inputs_&sidebarid=%22kaartekomplexer%22&variable=%22", variable, "%22>", Variabel, "</a>")) %>%
                 dplyr::select(-variable),  
               escape = FALSE,
               #height = 600,

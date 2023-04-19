@@ -24,6 +24,16 @@ library(gganimate)
 #library(moreparty)
 #library(varImp)
 
+# load paths externally
+paths <- rio::import("paths.csv")
+SERVER_local <- filter(paths, name == "SERVER_local") %>%
+  select(path) %>%
+  as.character()
+
+SERVER <- filter(paths, name == "SERVER") %>%
+  select(path) %>%
+  as.character()
+
 # setup_font(
 #   id = "open-sans", 
 #   output_dir = "fonts", 
@@ -72,20 +82,7 @@ rivers <- readRDS("river.RDS")
 # OSM base map
 #osm_map <- qread("osm_map.qs")
 
-# umfrage <- readRDS("umfrage_export.rds") %>%
-#   dplyr::select(id, homogeneity_index) %>%
-#   mutate(id = word(id, 2, sep = fixed("_"))) %>%
-#   rename(`surveyID1` = `id`) %>%
-#   mutate(`Sproochkontakt` = cut(homogeneity_index, breaks=c(0, 1, 2, 3, 4, 5),
-#                                  labels=c('méi Afloss', 'bëssen Afloss', 'weeder nach', 'wéineg Afloss', 'keen Afloss')))
-
 color_palette <- c('#56cc9d','#beaed4','#fdc086','#ffff99','#386cb0','#f0027f','#bf5b17','#666666')
-
-# load directly from Google Docs    
-# gs4_deauth()
-# variables <- range_read(ss = "1IDtvxHgccWg2JMu-dqJyqsCpwsurpYLOgm6rfE0mMGU", sheet = "kaartesettings", col_names=T, col_types = "c") %>%
-#   filter(active == "yes") %>%
-#   arrange(map_category, input_choice)
 
 # faster - load from local csv
 variables <- read.csv("kaartesettings.csv") %>%
@@ -262,7 +259,7 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
   #ggsave(plot = p, filename = paste0(map_title, ".pdf"), units = "cm", width = 22)
   #ggsave(plot = plot_row, filename = paste0(map_title, "_mat_LSA.pdf"), device="pdf", dpi=400, units = "cm", width = 28)
   
-  qsave(plot_row, file = paste0(map_title, "_Iwwerbleckskaart.qs"))
+  qsave(plot_row, file = paste0("Iwwerbleckskaart_", map_title, ".qs"))
   print(plot_row)
 }
 
@@ -302,7 +299,7 @@ make_summary_plot_age_dynamic <- function(dataset, lsa_map_number, selection, co
     labs(title = paste("Variabel: ", word(map_title, 2, sep="_")),
          fill = paste0("Haaptvariant\npro ", word(geo_type, 1, sep = "_")),
          x = "", y = "",
-         caption = paste0(variant_count, " Participanten | Klengst Polygoner: Kanton\n© Uni Lëtzebuerg | generéiert ", date())
+         caption = paste0(variant_count, " Participanten | Klengst Polygoner:", word(geo_type, 1, sep = "_"), "\n© Uni Lëtzebuerg | generéiert ", date())
     ) +
     theme_void(base_family = "sans") +
     theme(plot.title = element_text(size=16, hjust = 0.5, face="bold"),
@@ -313,15 +310,17 @@ make_summary_plot_age_dynamic <- function(dataset, lsa_map_number, selection, co
   
   
   anim <- p +
-    transition_manual(factor(Alter, levels = c('65+', '55 bis 64', '45 bis 54', '35 bis 44', '25 bis 34', '≤ 24'))
+    transition_manual(factor(Alter, 
+                             levels = c('eeler', 'mëttel-al', 'jonk'))
                       ) +
     ggtitle('Alter {current_frame}')
   
-  anim_save(paste0(map_title, "_Iwwerbleckskaart_age.gif"), animate(anim, end_pause = 2, height = 700))
+  # save the animation
+  anim_save(paste0("Iwwerbleckskaart_age_animation_", map_title, ".gif"), animate(anim, end_pause = 2, height = 700))
   
   # Return a list containing the filename
   # this can be displayed then with imageOutput
-  list(src = paste0(map_title, "_Iwwerbleckskaart_age.gif"), contentType = "image/gif")
+  list(src = paste0("Iwwerbleckskaart_age_animation_", map_title, ".gif"), contentType = "image/gif")
 }
 
 ########################################
@@ -361,7 +360,7 @@ make_summary_plot_age <- function(dataset, lsa_map_number, selection, color_num,
     labs(title = paste("Variabel '", word(map_title, 2, sep="_"), "' no Alter"),
          fill = paste0("Haaptvariant\npro ", word(geo_type, 1, sep = "_")),
          x = "", y = "",
-         caption = paste0(variant_count, " Participanten | Klengst Polygoner: Kanton\n© Uni Lëtzebuerg | generéiert ", date())
+         caption = paste0(variant_count, " Participanten | Klengst Polygoner: ", word(geo_type, 1, sep = "_"), "\n© Uni Lëtzebuerg | generéiert ", date())
     ) +
     theme_void(base_family = "sans") +
     theme(plot.title = element_text(size=16, hjust = 0.5, face="bold"),
@@ -373,7 +372,7 @@ make_summary_plot_age <- function(dataset, lsa_map_number, selection, color_num,
     facet_wrap(. ~ Alter)
   
   # Save maps
-  qsave(p, file = paste0(map_title, "_Iwwerbleckskaarten_Alter.qs"))
+  qsave(p, file = paste0("Iwwerbleckskaarten_Alter_", map_title, ".qs"))
   
   # return maps
   p
