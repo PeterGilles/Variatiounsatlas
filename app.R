@@ -7,17 +7,6 @@
 #    http://shiny.rstudio.com/
 #
 
-##
-## Diese App ist auch zum Generieren der Karten!!!
-##
-
-# Struktur der Bookmarks:
-# http://127.0.0.1:7383/?_inputs_&variable=%22Variant_Akafsweenchen%22&sidebarid=%22kaartekomplexer%22
-#
-
-### Deployment
-# rsconnect::deployApp(appDir = "~/Documents/_Daten/Schnessen-App/MappingDialects/shiny_dev/atlas",  account = "petergill", server = "shinyapps.io", appName = "Variatiounsatlas",      appTitle = "Variatiounsatlas", launch.browser = function(url) {         message("Deployment completed: ", url)     }, lint = FALSE, metadata = list(asMultiple = FALSE, asStatic = FALSE),      logLevel = "verbose") 
-
 source("global.R")
 
 ## UI
@@ -291,93 +280,89 @@ server <- function(input, output, session) {
   #   filter(map_category(), input_choice == input$input_choice)
   # })
   
+  # Reactive function for the variable
   variable <- reactive({
     req(input$variable)
-    variable <- input$variable
-    return(variable)
+    input$variable
   })
   
+  # Reactive function for the variable_name
   variable_name <- reactive({
-    #req(input$variable)
-    variable_name <- variables %>%
+    variables %>%
       dplyr::filter(variable == variable()) %>%
       dplyr::select(input_choice)
-    return(variable_name)
   })
   
-  
+  # Reactive function for the selection
   selection <- reactive({
-    # pull variant selection list from tribble
-    selection <- variables %>% 
-      filter(variable == variable()) %>% 
-      pull(selection) %>% 
-      as.character() %>% 
+    selection <- variables %>%
+      filter(variable == variable()) %>%
+      pull(selection) %>%
+      as.character() %>%
       as.vector()
     selection <- strsplit(selection, " ")[[1]]
     return(selection)
   })
   
+  
+  # Reactive function to load the appropriate Google table based on the selected variable
   google_df <- reactive({
-    # load google table according to input selection from variables (< google sheet kaartesettings)
+    # Obtain the Google table name associated with the selected variable
     google_df_name <- variables %>%
       filter(variable == variable()) %>% pull(google_df)
     
-    # load QS only when selected in menu
-    google_df <- qread(paste0(google_df_name, ".qs")) 
-    
-    return(google_df)
+    # Load and return the QS file associated with the table name
+    qread(paste0(google_df_name, ".qs"))
   })
   
+  # Reactive function to pivot the Google table to a longer format and filter by selected variants
   longer_google_df <- reactive({
     google_df() %>%
+      # Pivot the table to a longer format
       pivot_longer(cols = variable(),
                    names_to = "variable",
                    values_to = "variants") %>%
-      # take only variants in selection into account
+      # Filter rows based on selected variants
       filter(variants %in% selection())
-  }) 
+  })
   
-  # prepare data for maps
+  # Reactive function to prepare data for maps
   prepare_data <- reactive({
     
+    # Get the longer_google_df
     longer_google_df <- longer_google_df()
     
-    # switch base polygon depending on number of participants per item
-    # commune when more than 400, otherwise canton
-    if(nrow(longer_google_df) <= 400) {
-      geo_type <- "Kanton"
-    } else {
-      geo_type <- "Gemeng"
-    }
+    # Determine the base polygon (canton or commune) based on the number of participants per item
+    geo_type <- if (nrow(longer_google_df) <= 400) "Kanton" else "Gemeng"
     
+    # Pivot the table and add a 'geo_type' column
     longer_google_df <- longer_google_df %>%
       pivot_longer(cols = geo_type,
                    names_to = "geo_type",
                    values_to = "geo_name") %>%
       mutate(variants = factor(variants, ordered = TRUE))
     
+    # Calculate the total and frequency of each variant
     variants_total <- longer_google_df %>%
       filter(geo_type == geo_type) %>%
       group_by(geo_name, variable(), variants) %>%
       count() %>%
-      group_by(geo_name, variable())%>%
-      #drop_na(variants) %>%
+      group_by(geo_name, variable()) %>%
       mutate(total = sum(n)) %>%
-      mutate(freq = n/total)
-
-    # attach total population per Gemeng
+      mutate(freq = n / total)
+    
+    # Attach the total population per commune
     Gemengen_Statistiken <- qread("Gemengen_Statistiken.qs")
     awunner <- Gemengen_Statistiken %>%
-      dplyr::distinct(Gemeng, Awunnerzuel) 
+      dplyr::distinct(Gemeng, Awunnerzuel)
     
     variants_total <- left_join(variants_total, awunner, by = c("geo_name" = "Gemeng"))
     
-    # add weighted average
+    # Add a weighted average column
     variants_total <- variants_total %>%
-      mutate(weighted_freq = freq * (Awunnerzuel/ 601400))
+      mutate(weighted_freq = freq * (Awunnerzuel / 601400))
     
-    #print((variants_total))    
-    
+    # Add the color column based on the selection
     color <- color_palette
     color_column <- tribble(~variants, ~color,
                             selection()[1], color[1],
@@ -389,38 +374,34 @@ server <- function(input, output, session) {
                             selection()[7], color[7],
                             selection()[8], color[8])
     
-    variants_total <- left_join(variants_total, color_column, copy = TRUE) 
+    variants_total <- left_join(variants_total, color_column, copy = TRUE)
     
-    if(geo_type == "Kanton") {
-      df <-  inner_join(cantons_df, variants_total, by = c("id"= "geo_name"), multiple = "all")
+    # Join the data with the corresponding geographical data (cantons_df or communes_df)
+    df <- if (geo_type == "Kanton") {
+      inner_join(cantons_df, variants_total, by = c("id" = "geo_name"), multiple = "all")
     } else {
-      df <-  inner_join(communes_df, variants_total, by = c("id"= "geo_name"), multiple = "all")
+      inner_join(communes_df, variants_total, by = c("id" = "geo_name"), multiple = "all")
     }
-  
-    returnList <- list("dataset" = df, "geo_type" = geo_type)
-    returnList
+    
+    return(list("dataset" = df, "geo_type" = geo_type))
   })
   
-  ###############################
-  # prepare data for maps + age
   
+  # Reactive function to prepare data for maps with age information
   prepare_data_age <- reactive({
     
+    # Get the longer_google_df
     longer_google_df <- longer_google_df()
     
-    # switch base polygon depending on number of participants per item
-    # commune when more than 2000, otherwise canton
-    if(nrow(longer_google_df) <= 2200) {
-      geo_type <- "Kanton"
-    } else {
-      geo_type <- "Gemeng"
-    }
+    # Determine the base polygon (canton or commune) based on the number of participants per item
+    geo_type <- if (nrow(longer_google_df) <= 2200) "Kanton" else "Gemeng"
     
+    # Recode age, pivot the table, and add a 'geo_type' column
     longer_google_df <- longer_google_df %>%
-      # recode Alter into 3 categories
-      mutate(Alter = case_match(Alter, c("≤ 24", "25 bis 34") ~ "jonk",
-            c("35 bis 44", "45 bis 54") ~ "mëttel-al",
-            c("55 bis 64", "65+") ~ "eeler")
+      mutate(Alter = case_match(Alter,
+                                c("≤ 24", "25 bis 34") ~ "jonk",
+                                c("35 bis 44", "45 bis 54") ~ "mëttel-al",
+                                c("55 bis 64", "65+") ~ "eeler")
       ) %>%
       mutate(Alter = factor(Alter, levels = c("eeler", "mëttel-al", "jonk"))) %>%
       pivot_longer(cols = geo_type,
@@ -428,26 +409,16 @@ server <- function(input, output, session) {
                    values_to = "geo_name") %>%
       mutate(variants = factor(variants, ordered = TRUE))
     
+    # Calculate the total and frequency of each variant, grouped by age
     variants_total <- longer_google_df %>%
       filter(geo_type == geo_type) %>%
       group_by(Alter, geo_name, variable(), variants) %>%
       count() %>%
-      group_by(Alter, geo_name, variable())%>%
-      #drop_na(variants) %>%
+      group_by(Alter, geo_name, variable()) %>%
       mutate(total = sum(n)) %>%
-      mutate(freq = n/total)
+      mutate(freq = n / total)
     
-    # attach total population per Gemeng
-    Gemengen_Statistiken <- qread("Gemengen_Statistiken.qs")
-    awunner <- Gemengen_Statistiken %>%
-      dplyr::distinct(Gemeng, Awunnerzuel) 
-    
-    variants_total <- left_join(variants_total, awunner, by = c("geo_name" = "Gemeng"))
-    
-    # add weighted average
-    variants_total <- variants_total %>%
-      mutate(weighted_freq = freq * (Awunnerzuel/ 601400))
-    
+    # Add the color column based on the selection
     color <- color_palette
     color_column <- tribble(~variants, ~color,
                             selection()[1], color[1],
@@ -459,17 +430,18 @@ server <- function(input, output, session) {
                             selection()[7], color[7],
                             selection()[8], color[8])
     
-    variants_total <- left_join(variants_total, color_column, copy = TRUE) 
+    variants_total <- left_join(variants_total, color_column, copy = TRUE)
     
-    if(geo_type == "Kanton") {
-      df <-  inner_join(cantons_df, variants_total, by = c("id"= "geo_name"), multiple = "all")
+    # Join the data with the corresponding geographical data (cantons_df or communes_df)
+    df <- if (geo_type == "Kanton") {
+      inner_join(cantons_df, variants_total, by = c("id" = "geo_name"), multiple = "all")
     } else {
-      df <-  inner_join(communes_df, variants_total, by = c("id"= "geo_name"), multiple = "all")
+      inner_join(communes_df, variants_total, by = c("id" = "geo_name"), multiple = "all")
     }
     
-    returnList_dyn <- list("dataset" = df, "geo_type" = geo_type)
-    returnList_dyn
+    return(list("dataset" = df, "geo_type" = geo_type))
   })
+  
   
 ### infoBox for overview of variable
   output$variable <- renderInfoBox({

@@ -1,3 +1,15 @@
+# List of required packages
+required_packages <- c("tidyverse", "sf", "cowplot", "patchwork", "scales",
+                       "jpeg", "magick", "raster", "mapproj", "DT", "googlesheets4",
+                       "waiter", "qs", "shinydashboard", "shinydashboardPlus", "markdown",
+                       "ggiraph", "gfonts", "shinycssloaders", "partykit", "gganimate")
+
+# Install the packages that are not installed
+new_packages <- required_packages[!required_packages %in% installed.packages()[, "Package"]]
+if (length(new_packages) > 0) {
+  install.packages(new_packages)
+}
+
 library(tidyverse)
 library(sf)
 library(cowplot) # creates too large objects!
@@ -24,16 +36,18 @@ library(gganimate)
 #library(moreparty)
 #library(varImp)
 
-# load paths externally
+## Some settings
+# 1. load paths externally
 paths <- rio::import("paths.csv")
 SERVER_local <- filter(paths, name == "SERVER_local") %>%
-  select(path) %>%
+  dplyr::select(path) %>%
   as.character()
 
 SERVER <- filter(paths, name == "SERVER") %>%
-  select(path) %>%
+  dplyr::select(path) %>%
   as.character()
 
+## Font stuff
 # setup_font(
 #   id = "open-sans", 
 #   output_dir = "fonts", 
@@ -109,33 +123,37 @@ plot_freq_variants <- function(data, variable, selection, caption = "") {
   color <- color_palette[1:length(selection)]
   
   bar_df <- data %>%
-    # Einschränkung auf gewünschte Variable
-    dplyr::select(variable = {{variable}}) %>%
-    # Nur Varianten aus der Selection
-    filter(variable %in% selection) %>%
+    dplyr::select(variable = {{variable}}) %>%         # Filter the desired variable
+    filter(variable %in% selection) %>%                # Only include variants from the selection
     drop_na() %>%
-    # Dummy variable for stacking
-    mutate(Varianten = "Varianten") 
-  
+    mutate(Varianten = "Varianten",                    # Dummy variable for stacking
+           variable = factor(variable, levels = selection)) 
   
   # Simple bar chart
-  bar <- ggplot(data=bar_df %>% 
+  bar <- ggplot(data = bar_df %>% 
                   count(Varianten, variable) %>%
-                  mutate(total = sum(n)), 
-                aes(x=Varianten, y=n, fill=variable, label = paste0(round(n/total, 2)*100, "%\n", n))) +
-    geom_bar(stat="identity") +
-    scale_fill_manual(values = color[1:length(selection)], breaks = selection) +
+                  mutate(total = sum(n), 
+                         label = paste0(round(n/total, 2)*100, "%\n", n)),
+                aes(x = Varianten, y = n, fill = variable, label = label)) +
+    geom_bar(stat = "identity") +
+    scale_fill_manual(values = color, breaks = selection) +
     geom_text(position = position_stack(vjust = .5), size = 5, alpha = 0.9, color = "antiquewhite") +
-    theme_void() +
+    coord_flip() +
     theme(axis.title.x = element_blank(),
           axis.text.y = element_blank(),
           axis.title.y = element_blank(),
           legend.position = "bottom",
           legend.title = element_blank(),
-          legend.text = element_text(size=13),
-          legend.box = "horizontal", 
-          text = element_text(size=13)) +
-    coord_flip() 
+          legend.text = element_text(size = 13),
+          legend.box = "horizontal",
+          text = element_text(size = 13),
+          plot.background = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.border = element_blank(),
+          panel.background = element_blank(),
+          axis.ticks = element_blank(),
+          axis.text.x = element_blank())
   
   return(bar)
 }
@@ -378,44 +396,33 @@ make_summary_plot_age <- function(dataset, lsa_map_number, selection, color_num,
   p
 }
 
-###########################
 #Function Variantekaarten #
-###########################
-
 make_plot <- function(dataset, variable, color) {
   
-  # get count of all observations
+  # Get count of all observations
   variant_count <- dataset %>% 
     distinct(id, n) %>% 
     summarize(sum(n))
   
-  ggplot() +
-    geom_polygon(data = dataset, aes(x = long, y = lat, fill= freq, 
-                                     group = id), linewidth=0, alpha = 1, colour = "lightgrey") +
-    # geom_sf(data = rivers$osm_lines %>%
-    #           filter(name %in% c("Alzette", "Sûre", "Sauer", "Sauer - Sûre", "Mosel")),
-    #         color = "#46b4e7") +
+  # Create ggplot
+  plot <- ggplot() +
+    geom_polygon(data = dataset, aes(x = long, y = lat, fill = freq, 
+                                     group = id), linewidth = 0, alpha = 1, colour = "lightgrey") +
     geom_polygon(data = cantons_df, aes(x = long, y = lat, group = id), 
-                 linewidth= .1, colour = "#a9a9a9", fill = NA) +
+                 linewidth = .1, colour = "#a9a9a9", fill = NA) +
     coord_map() +
-    # coord_map() will not work, if there is geom_sf layer, hence: coord_sf()
-    # coord_sf(xlim = c(5.715637, 6.54680),
-    #          ylim = c(49.393100, 50.192726),
-    #          expand = FALSE) +
     scale_fill_gradient(guide = guide_legend(), low = "white", high = color,
-                        name = paste(variant_count, "Participanten"), na.value="white", limits=0:1, labels = percent(0.25*0:4)) +
-    labs(title = str_replace({{variable}}, "_", " "), x = "", y = "") +
+                        name = paste(variant_count, "Participanten"), na.value = "white", limits = 0:1, labels = scales::percent(0.25 * 0:4)) +
+    labs(title = stringr::str_replace({{variable}}, "_", " "), x = "", y = "") +
     theme_void() +
-    theme(plot.title = element_text(size=16, face = "bold", hjust = 0.5),
-          legend.position = "bottom", # c(0.85, 0.75)
-          legend.text = element_text(size=11),
-          legend.title = element_text(size=12),
-          plot.margin=unit(c(0.2, 0, 0.2, 0), "cm") ) +
-    guides(fill = guide_colourbar(barwidth = 7, barheight = .7, ticks = FALSE, title.position = "bottom", title.hjust = 0.5)) 
+    theme(plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+          legend.position = "bottom",
+          legend.text = element_text(size = 11),
+          legend.title = element_text(size = 12),
+          plot.margin = unit(c(0.2, 0, 0.2, 0), "cm")) +
+    guides(fill = guide_colourbar(barwidth = 7, barheight = .7, ticks = FALSE, title.position = "bottom", title.hjust = 0.5))
   
-  # to save maps as pdf and png
-  #ggsave(filename = paste0(str_replace(variable, "/", "_"), ".png"), units = "cm", width = 22)
-  #ggsave(filename = paste0(str_replace(variable, "/", "_"), ".pdf"), units = "cm", width = 22)
+  return(plot)
 }
 
 ################################
