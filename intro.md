@@ -2,7 +2,7 @@
 
 An dësem Atlas fannt Dir déi éischt Kaarten aus eisem [Schnëssen-Projet](https://infolux.uni.lu/schnëssen). Pro Kaart sinn d'Opname vu 500 bis 2000 Leit verschafft an domat kritt een eng zimmlech zouverlässeg Impressioun vun der haiteger Variatioun am Lëtzebuergeschen. Gläichzäiteg kann een un de Kaarten a Visualiséierungen ofliesen, wéi staark d'Lëtzebuergescht am Moment amgaang ass sech ze veränneren.
 
-<div><img src="www/Beispill_Nuecht.png" width="100%" /></div>
+<div><img src="www/Beispill_Nuecht.png" width="70%" /></div>
 
 An dëser éischter Editioun hu mir ca. **700** verschidde Kaarten ausgewielt.
 

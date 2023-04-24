@@ -1,17 +1,17 @@
-# List of required packages
-required_packages <- c("tidyverse", "sf", "cowplot", "patchwork", "scales",
-                       "jpeg", "magick", "raster", "mapproj", "DT", "googlesheets4",
-                       "waiter", "qs", "shinydashboard", "shinydashboardPlus", "markdown",
-                       "ggiraph", "gfonts", "shinycssloaders", "partykit", "gganimate")
-
-# Install the packages that are not installed
-new_packages <- required_packages[!required_packages %in% installed.packages()[, "Package"]]
-if (length(new_packages) > 0) {
-  install.packages(new_packages)
-}
+# # List of required packages
+# required_packages <- c("tidyverse", "sf", "cowplot", "patchwork", "scales",
+#                        "jpeg", "magick", "raster", "mapproj", "DT", "googlesheets4",
+#                        "waiter", "qs", "shinydashboard", "shinydashboardPlus", "markdown",
+#                        "ggiraph", "gfonts", "shinycssloaders", "partykit", "gganimate")
+# 
+# # Install the packages that are not installed
+# new_packages <- required_packages[!required_packages %in% installed.packages()[, "Package"]]
+# if (length(new_packages) > 0) {
+#   install.packages(new_packages)
+# }
 
 library(tidyverse)
-library(sf)
+#library(sf)
 library(cowplot) # creates too large objects!
 library(patchwork) # smaller objects
 library(scales)
@@ -29,8 +29,8 @@ library(markdown)
 library(ggiraph)
 library(gfonts)
 library(shinycssloaders)
-library(partykit)
-library(gganimate)
+#library(partykit)
+#library(gganimate)
 
 #library(randomForest)
 #library(moreparty)
@@ -86,10 +86,13 @@ preloader <- list(html = tagList(spin_1(), "De Variatiounsatlas gëtt gelueden .
 
 # load prepared polygon data for cantons and communes
 cantons_df <- readRDS("cantons_df.RDS")
-communes_df <- readRDS("communes_df.RDS")
+#communes_df <- readRDS("communes_df.RDS")
 
 # Weider Elementer fir d'Kaartéierung
-rivers <- readRDS("river.RDS")
+# rivers <- readRDS("river.RDS")
+# rivers <- rivers[["osm_lines"]] %>%
+#   filter(name %in% c("Alzette", "Sûre", "Sauer", "Sauer - Sûre", "Mosel", "Moselle"))
+
 #bbox_lux_2500.sf <-readRDS("bbox_lux_2500.sf.rds")
 #elevation_raster <- readRDS("elevation_raster.rds")
 
@@ -160,13 +163,10 @@ plot_freq_variants <- function(data, variable, selection, caption = "") {
 
 #############################
 # Function Iwwerbléckskaart #
-#############################
 
 make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map_title, item_number ="", item_text = "", geo_type) {
   
   color <- color_palette[1:color_num]
-  # TODO remove '_' from selection
-  #selection <- str_replace(selection, "_", "")
   
   # get count of all observations
   variant_count <- dataset %>% distinct(id, total)
@@ -179,17 +179,6 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
     mutate(max_variant = variants) 
   
   p <-  ggplot() +
-    # polygons for variants
-    # use the hue of the color to indicate the frequency, use:  'alpha = freq' in aes() - this is, however more irritating
-    #geom_polygon(aes(x = long, y = lat, fill=max_variant, group = id), size=0, alpha = 0.9) +
-    
-    # # Elevation
-    # geom_raster(data = elevation_raster, aes(lon, lat, fill = alt), alpha = .45) +
-    # # scale_fill_gradientn(colours = terrain.colors(100)) +
-    # geom_sf(data = bbox_lux_2500.sf, fill = NA) +
-    # coord_sf(xlim = c(st_bbox(bbox_lux_2500.sf)['xmin'], st_bbox(bbox_lux_2500.sf)['xmax']), 
-    #         ylim = c(st_bbox(bbox_lux_2500.sf)['ymin'], st_bbox(bbox_lux_2500.sf)['ymax'])) +
-    
   # variant data
   geom_polygon_interactive(data = dataset, aes(x = long, y = lat, fill=max_variant, group = id,
                                                tooltip = paste0("Lokalitéit: ", id, "\nHeefegst Variant: ", max_variant,
@@ -198,17 +187,14 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
                            # alpha per polygon steered by percentage, if not useful, set alpha back to 0.8
                            linewidth=0, alpha = dataset$prozent) +
     # add Rivers
-    geom_sf(data = rivers[["osm_lines"]] %>%
-              filter(name %in% c("Alzette", "Sûre", "Sauer", "Sauer - Sûre", "Mosel", "Moselle")),
-            color = "#46b4e7") +
+    #geom_sf(data = rivers, color = "#46b4e7") +
     # borders of cantons
     geom_polygon(data = cantons_df, aes(x = long, y = lat, group = id),
                  linewidth= .1, colour = "#a9a9a9", fill = NA) +
-    #coord_map() +
-    coord_sf(xlim = c(5.715637, 6.54680),
-             ylim = c(49.393100, 50.192726),
-             expand = FALSE) +
-    
+    coord_map() +
+    # coord_sf(xlim = c(5.715637, 6.54680),
+    #          ylim = c(49.393100, 50.192726),
+    #          expand = FALSE) +
     scale_colour_identity() +
     scale_fill_manual(values = color[1:color_num],
                       breaks = selection) +
@@ -224,11 +210,6 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
           legend.text = element_text(size=34),
           legend.title = element_text(size=35, face = "bold"))
   
-  # TODO
-  # generate a histogram
-  # histogram <- ggplot() +
-  #   geom_histogram(data = dataset %>% distinct(id, .keep_all = TRUE), aes(x=round(freq, 2)*100), binwidth=10)
-  
   # plot with or without LSA
   # with LSA
   if(lsa_map_number != "NO") {
@@ -241,7 +222,7 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
       theme_void() +
       theme(plot.caption = element_text(size=26))
     
-    plot_row <- cowplot::plot_grid(lsa, p, nrow = 1, ncol = 2)
+    plot_row <- wrap_plots(lsa, p, nrow = 1, ncol = 2)
     
     plot_row <- girafe(code = print(plot_row),
                        width_svg = 27, height_svg = 18,
@@ -251,18 +232,7 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
                          opts_selection(
                            type = "multiple", css = "fill:#FF3333;stroke:black;")))
   } else {
-    # without LSA
-    #    plot_row <- p
-    
-    # to include histogram
-    # p2 <- ggdraw(p) +
-    #   draw_plot(histogram, .45, .45, .5, .5) +
-    #   draw_plot_label(
-    #     c("A", "B"),
-    #     c(0, 0.45),
-    #     c(1, 0.95),
-    #     size = 12
-    #   )
+  #without LSA map
     plot_row <- girafe(code = print(p),
                        width_svg = 20, height_svg = 24,
                        fonts = list(sans = "Sans"),
@@ -278,7 +248,7 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
   #ggsave(plot = plot_row, filename = paste0(map_title, "_mat_LSA.pdf"), device="pdf", dpi=400, units = "cm", width = 28)
   
   qsave(plot_row, file = paste0("Iwwerbleckskaart_", map_title, ".qs"))
-  print(plot_row)
+  return(plot_row)
 }
 
 #######################################
@@ -317,9 +287,9 @@ make_summary_plot_age_dynamic <- function(dataset, lsa_map_number, selection, co
     labs(title = paste("Variabel: ", word(map_title, 2, sep="_")),
          fill = paste0("Haaptvariant\npro ", word(geo_type, 1, sep = "_")),
          x = "", y = "",
-         caption = paste0(variant_count, " Participanten | Klengst Polygoner:", word(geo_type, 1, sep = "_"), "\n© Uni Lëtzebuerg | generéiert ", date())
+         caption = paste0(variant_count, " Participanten | Klengst Polygoner: Kanton\n© Uni Lëtzebuerg | generéiert ", date())
     ) +
-    theme_void(base_family = "sans") +
+    #theme_void(base_family = "sans") +
     theme(plot.title = element_text(size=16, hjust = 0.5, face="bold"),
           plot.caption = element_text(size=11),
           legend.position =  c(0.9, 0.8),
@@ -334,7 +304,7 @@ make_summary_plot_age_dynamic <- function(dataset, lsa_map_number, selection, co
     ggtitle('Alter {current_frame}')
   
   # save the animation
-  anim_save(paste0("Iwwerbleckskaart_age_animation_", map_title, ".gif"), animate(anim, end_pause = 2, height = 700))
+  anim_save(paste0("Iwwerbleckskaart_age_animation_", map_title, ".gif"), animate(anim, duration = 5, fps=5, start_pause = 2, height = 700))
   
   # Return a list containing the filename
   # this can be displayed then with imageOutput
@@ -378,9 +348,9 @@ make_summary_plot_age <- function(dataset, lsa_map_number, selection, color_num,
     labs(title = paste("Variabel '", word(map_title, 2, sep="_"), "' no Alter"),
          fill = paste0("Haaptvariant\npro ", word(geo_type, 1, sep = "_")),
          x = "", y = "",
-         caption = paste0(variant_count, " Participanten | Klengst Polygoner: ", word(geo_type, 1, sep = "_"), "\n© Uni Lëtzebuerg | generéiert ", date())
+         caption = paste0(variant_count, " Participanten | Klengst Polygoner: Kanton\n© Uni Lëtzebuerg | generéiert ", date())
     ) +
-    theme_void(base_family = "sans") +
+    theme_void() +
     theme(plot.title = element_text(size=16, hjust = 0.5, face="bold"),
           plot.caption = element_text(size=12),
           legend.position =  "bottom",
@@ -390,10 +360,10 @@ make_summary_plot_age <- function(dataset, lsa_map_number, selection, color_num,
     facet_wrap(. ~ Alter)
   
   # Save maps
-  qsave(p, file = paste0("Iwwerbleckskaarten_Alter_", map_title, ".qs"))
+  #qsave(p, file = paste0("Iwwerbleckskaarten_Alter_", map_title, ".qs"))
   
   # return maps
-  p
+  return(p)
 }
 
 #Function Variantekaarten #
@@ -408,7 +378,7 @@ make_plot <- function(dataset, variable, color) {
   plot <- ggplot() +
     geom_polygon(data = dataset, aes(x = long, y = lat, fill = freq, 
                                      group = id), linewidth = 0, alpha = 1, colour = "lightgrey") +
-    geom_polygon(data = cantons_df, aes(x = long, y = lat, group = id), 
+    geom_polygon(data = cantons_df, aes(x = long, y = lat, group = id),
                  linewidth = .1, colour = "#a9a9a9", fill = NA) +
     coord_map() +
     scale_fill_gradient(guide = guide_legend(), low = "white", high = color,
@@ -425,9 +395,7 @@ make_plot <- function(dataset, variable, color) {
   return(plot)
 }
 
-################################
 # Function to plot Sozialdaten #
-################################
 
 plot_social_categories <- function(data, social_category, variable, selection, caption = "") {
   
@@ -646,7 +614,7 @@ plot_VariableImportance <- function(data, variable, selection) {
   #         axis.title=element_blank())
   
   # save
-  qsave(plot, file = paste0(variable, "_VariableImportance.qs"))
+  #qsave(plot, file = paste0(variable, "_VariableImportance.qs"))
   
   return(plot)
   

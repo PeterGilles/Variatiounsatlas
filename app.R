@@ -69,23 +69,18 @@ ui <- function(request) {
         ),
         
         menuItem("Kaartekatalog", tabName = "kaartekatalog"),
-        #menuItem("Datebasis", tabName = "struktur"),
+
         menuItem("Merci", tabName = "outro")
       )
     ),
     body = dashboardBody(
       tags$head(
+        #tags$link(rel = "stylesheet", type = "text/css", href = "css/custom.css"),
         tags$link(rel = "shortcut icon", href = "favicon.png")
       ),
-      ### changing theme
-      # shinyDashboardThemes(
-      #   theme = "poor_mans_flatly"
-      # ),
       tabItems(
         # page Intro ----
         tabItem(tabName = "intro", includeMarkdown("intro.md")),
-        
-        #tabItem(tabName = "struktur", includeMarkdown("struktur.md")),
         
         # page Kaartekomplexer ----
         tabItem(
@@ -119,7 +114,7 @@ ui <- function(request) {
           fluidRow(
             box(
               title = "Kartografie",
-              footer = "D'Unitéit vun der Kartéierung riicht sech no der Unzuel vun de Participanteën/Participanten. Bei manner wéi 400 gëtt op der Basis vum Kanton kartéiert; bei méi wéi 400 op der Basis vun der Gemeng. D'Faarf korrespondéiert mat der heefegster Variant pro Polygon an d'Verbreedung vun där Variant gëtt besser visibel. D'Intensitéit vun der Faarf weist déi relativ Heefegkeet vun där Variant. Wat méi intensiv, wat d'Heefegkeet méi héich ass. Wann d'Faarf méi hell ass, dann ass déi Gemeng/dee Kanton duerch Mëschung vu verschiddene Variante charakteriséiert. D'Beweegung mat der Maus liwwert weider Infoe iwwert d'Varianteverdeelung. Fir wäiss Polygoner leie keng Date vir.",
+              footer = "D'Faarf korrespondéiert mat der heefegster Variant pro Polygon an d'Verbreedung vun där Variant gëtt besser visibel. D'Intensitéit vun der Faarf weist déi relativ Heefegkeet vun där Variant. Wat méi intensiv, wat d'Heefegkeet méi héich ass. Wann d'Faarf méi hell ass, dann ass déi Gemeng/dee Kanton duerch Mëschung vu verschiddene Variante charakteriséiert. D'Beweegung mat der Maus liwwert weider Infoe iwwert d'Varianteverdeelung. Fir wäiss Polygoner leie keng Date vir.",
               solidHeader = T,
               width = 12,
               collapsible = T,
@@ -130,29 +125,16 @@ ui <- function(request) {
                 type = "tabs",
                 #side="right",
                 tabPanel("Iwwerbléckskaart", withSpinner(girafeOutput("Iwwerbléckskaart", height = "700px"))),
-                tabPanel("No Alter", withSpinner(plotOutput("Iwwerbléckskaart_no_alter", height = "700px"))),
-                tabPanel("Altersanimatioun", withSpinner(plotOutput("Iwwerbléckskaart_dynamic", height = "700px")))
+                tabPanel("Kaarten nom Alter", withSpinner(plotOutput("Iwwerbléckskaart_no_alter", height = "500px"))),
+                #tabPanel("Altersanimatioun", withSpinner(plotOutput("Iwwerbléckskaart_dynamic", height = "700px")))
               )
             )
           ),
           
-          # fluidRow(
-          #   box(
-          #     title = "Iwwerbléckskaart - dynamesch",
-          #     #footer = "D'Unitéit vun der Kartéierung riicht sech no der Unzuel vun de Participanteën/Participanten. Bei manner wéi 400 gëtt op der Basis vum Kanton kartéiert; bei méi wéi 400 op der Basis vun der Gemeng. D'Faarf korrespondéiert mat der heefegster Variant pro Polygon an d'Verbreedung vun där Variant gëtt besser visibel. D'Intensitéit vun der Faarf weist déi relativ Heefegkeet vun där Variant. Wat méi intensiv, wat d'Heefegkeet méi héich ass. Wann d'Faarf méi hell ass, dann ass déi Gemeng/dee Kanton duerch Mëschung vu verschiddene Variante charakteriséiert. D'Beweegung mat der Maus liwwert weider Infoe iwwert d'Varianteverdeelung. Fir wäiss Polygoner leie keng Date vir.",
-          #     solidHeader = T,
-          #     width = 12,
-          #     collapsible = T,
-          #     status = "primary",
-          #     shinycssloaders::withSpinner(imageOutput("Iwwerbléckskaart_dynamic", height = "700px"))
-          #     #shinycssloaders::withSpinner(ggiraph::girafeOutput("Iwwerbléckskaart", height = "700px"))
-          #   )
-          # ),
-          
           fluidRow(
             box(
               title = "Variantekaarten",
-              footer ="Dës Variantekaarte weisen d'quantiativ Verdeelung separat pro Variant. Esou gëtt d'Stabilitéit, Ausbreedung an d'Zeréckgoe vun enger Variant visualiséiert.",
+              footer ="Dës Variantekaarte weisen d'quantitativ Verdeelung separat pro Variant. Esou gëtt d'Stabilitéit, Ausbreedung an d'Zeréckgoe vun enger Variant visualiséiert.",
               solidHeader = T,
               width = 12,
               collapsible = T,
@@ -318,6 +300,8 @@ server <- function(input, output, session) {
   # Reactive function to pivot the Google table to a longer format and filter by selected variants
   longer_google_df <- reactive({
     google_df() %>%
+      # filter only data from Luxembourg
+      filter(Kanton != "") %>%
       # Pivot the table to a longer format
       pivot_longer(cols = variable(),
                    names_to = "variable",
@@ -333,7 +317,7 @@ server <- function(input, output, session) {
     longer_google_df <- longer_google_df()
     
     # Determine the base polygon (canton or commune) based on the number of participants per item
-    geo_type <- if (nrow(longer_google_df) <= 400) "Kanton" else "Gemeng"
+    geo_type <- if (nrow(longer_google_df) <= 2200) "Kanton" else "Gemeng"
     
     # Pivot the table and add a 'geo_type' column
     longer_google_df <- longer_google_df %>%
@@ -418,6 +402,8 @@ server <- function(input, output, session) {
       mutate(total = sum(n)) %>%
       mutate(freq = n / total)
     
+    #saveRDS(variants_total, "test.rds")
+    
     # Add the color column based on the selection
     color <- color_palette
     color_column <- tribble(~variants, ~color,
@@ -470,16 +456,12 @@ server <- function(input, output, session) {
     )
   })
   
-  #########################################
   # Plot overall distribution of variants #
-  #########################################
   output$plotFreqVariants <- renderPlot({
-    
     plot_freq_variants(data = google_df(), variable = variable(), selection = selection())
     
   }) 
   
-  ######################
   ### Iwwerbléckskaart #
 
   output$Iwwerbléckskaart <- renderGirafe({
@@ -503,9 +485,8 @@ server <- function(input, output, session) {
     }
   })
   
-  ##############################
+
   ### Iwwerbléckskaarte per age #
-  ##############################
   
   output$Iwwerbléckskaart_no_alter <- renderPlot({
     lsa_map_number <- variables %>% filter(variable == variable()) %>% pull(lsa_map_number) %>% as.character()
@@ -516,20 +497,18 @@ server <- function(input, output, session) {
     # pull item text from tribble
     item_text <- variables %>% filter(variable == variable()) %>% pull(item_text) %>% as.character()
     
-    if(file.exists(paste0("Iwwerbleckskaarten_Alter_", variable(), ".qs"))) {
-      qread(paste0("Iwwerbleckskaarten_Alter_", variable(), ".qs"))
-    }
-    else {
+    # if(file.exists(paste0("Iwwerbleckskaarten_Alter_", variable(), ".qs"))) {
+    #   qread(paste0("Iwwerbleckskaarten_Alter_", variable(), ".qs"))
+    # }
+    # else {
       print(paste(variable(),": Eenzel Alterskaaarten gi generéiert"))
       make_summary_plot_age(data = prepare_data_age()[["dataset"]], lsa_map_number = lsa_map_number, 
                             selection= selection(), color_num = length(selection()), map_title = variable(), item_number, 
                             item_text, geo_type = prepare_data()[["geo_type"]])
-    }
+    # }
   })
   
-  #######################################
   ### Iwwerbléckskaart animation with age #
-  #######################################
   
   output$Iwwerbléckskaart_dynamic <- renderImage({
     lsa_map_number <- variables %>% filter(variable == variable()) %>% pull(lsa_map_number) %>% as.character()
@@ -540,19 +519,19 @@ server <- function(input, output, session) {
     # pull item text from tribble
     item_text <- variables %>% filter(variable == variable()) %>% pull(item_text) %>% as.character()
     
-    if(file.exists(paste0("Iwwerbleckskaart_age_animation_", variable(), ".gif"))) {
-      # get a list containing the filename
-      # this can be displayed then with imageOutput
-      list(src = paste0("Iwwerbleckskaart_age_animation_", variable(), ".gif"), contentType = "image/gif")
-    }
-    else {
+    # if(file.exists(paste0("Iwwerbleckskaart_age_animation_", variable(), ".gif"))) {
+    #   # get a list containing the filename
+    #   # this can be displayed then with imageOutput
+    #   list(src = paste0("Iwwerbleckskaart_age_animation_", variable(), ".gif"), contentType = "image/gif")
+    # }
+    # else {
       print(paste(variable(),": GIF gëtt generéiert"))
       make_summary_plot_age_dynamic(data = prepare_data_age()[["dataset"]], lsa_map_number = lsa_map_number, 
                                     selection= selection(), color_num = length(selection()), map_title = variable(), item_number, 
                                     item_text, geo_type = prepare_data()[["geo_type"]])
-    }
+    # }
   },
-  deleteFile = FALSE)
+  deleteFile = TRUE)
   
   #####################
   ### Variantekaarten #
@@ -575,26 +554,26 @@ server <- function(input, output, session) {
       # cowplot is used to arrange these maps in a grid - too large gg objects
       #p <- cowplot::plot_grid(plotlist = plots$plots, ncol = 2)
       # using now patchwork - smaller
-      p <- wrap_plots(plots$plots, ncol = 2)
+      p <- wrap_plots(plots$plots, ncol = 3)
       rm(plots, data)
       
       # save map as qs
-      print("saving Variantekaarten")
-      qsave(p, file = paste0("Variantekaarten_", variable(), ".qs"))
+      #print("saving Variantekaarten")
+      #qsave(p, file = paste0("Variantekaarten_", variable(), ".qs"))
       
       #ggsave(plot = p, filename = paste0("variantekaart_", ".pdf"), units = "cm", width = 22)
       return(p)
     }
     
     # if qs file already exist, display it (faster); if not, create the map (slower)
-    if(file.exists(paste0("Variantekaarten_", variable(), ".qs"))) {
-      print("lokal Variantekaarten")
-      qread(paste0("Variantekaarten_", variable(), ".qs"))
-    }
-    else {
+    # if(file.exists(paste0("Variantekaarten_", variable(), ".qs"))) {
+    #   print("lokal Variantekaarten")
+    #   qread(paste0("Variantekaarten_", variable(), ".qs"))
+    # }
+    # else {
       print(paste(variable(),": Varianteaarte gi generéiert"))
       all_maps(data = prepare_data()$dataset)
-    }
+    # }
   })
   
   # plot function
@@ -603,14 +582,14 @@ server <- function(input, output, session) {
   })
   
   # determine height by number of variants in plot
-  plotHeight <- reactive((700 + 20) * (ceiling(length(selection()) / 2 )) - 20)
-  
+  plotHeight <- reactive((700 + 20) * (ceiling(length(selection()) / 3 )) - 20 - 200)
+
   # render plot as UI (not plot!) to maintain height attribute
   output$plot.ui <- renderUI({
     plotOutput("Variantekaarten", height = plotHeight())
   })
   
-  # create download button
+  # create download button for Variantekaarten
   output$downloadData <- downloadHandler(
     filename = function() {
       paste("Variantekaarten_", variable(), Sys.Date(), ".png", sep="")
@@ -781,13 +760,6 @@ server <- function(input, output, session) {
                 autoWidth = TRUE)
     )
   })
-  
-  # # observer for bookmark
-  # observe({
-  #   reactiveValuesToList(input)
-  #   session$doBookmark()
-  # })
-  # onBookmarked(updateQueryString)
   
 }
 
