@@ -125,7 +125,7 @@ ui <- function(request) {
                 type = "tabs",
                 #side="right",
                 tabPanel("Iwwerbléckskaart", withSpinner(girafeOutput("Iwwerbléckskaart", height = "700px"))),
-                tabPanel("Kaarten nom Alter", withSpinner(plotOutput("Iwwerbléckskaart_no_alter", height = "500px"))),
+                tabPanel("Kaarten nom Alter", withSpinner(plotOutput("Iwwerbléckskaart_no_alter", height = "600px"))),
                 #tabPanel("Altersanimatioun", withSpinner(plotOutput("Iwwerbléckskaart_dynamic", height = "700px")))
               )
             )

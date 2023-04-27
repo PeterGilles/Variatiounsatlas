@@ -313,7 +313,6 @@ make_summary_plot_age_dynamic <- function(dataset, lsa_map_number, selection, co
 
 ########################################
 # Function Iwwerbléckskaarte per Alter #
-########################################
 
 make_summary_plot_age <- function(dataset, lsa_map_number, selection, color_num, map_title, item_number ="", item_text = "", geo_type) {
   
@@ -322,8 +321,27 @@ make_summary_plot_age <- function(dataset, lsa_map_number, selection, color_num,
   #selection <- str_replace(selection, "_", "")
   
   # get count of all observations
-  variant_count <- dataset %>% distinct(id, total)
-  variant_count <- sum(variant_count$total)
+  variant_count1 <- dataset %>% distinct(id, Alter, total)
+  variant_count <- sum(variant_count1$total)
+  
+  freq_alter <- variant_count1 %>%
+    group_by(Alter) %>%
+    summarise(freq_alter = sum(total))
+  
+  #print(freq_alter)
+  # # A tibble: 3 × 2
+  # Alter     freq_alter
+  # <fct>          <int>
+  #   1 eeler            144
+  # 2 mëttel-al        233
+  # 3 jonk             234
+
+  # define a function to create the labels
+  my_labeller <- function(value) {
+    freq_alter2 <- unique(freq_alter$freq_alter[freq_alter$Alter == value])
+    label <- paste0(value, "\n(N = ", freq_alter2, ")")
+    return(label)
+  }
   
   dataset <- dataset %>%
     group_by(id, Alter) %>%
@@ -351,13 +369,16 @@ make_summary_plot_age <- function(dataset, lsa_map_number, selection, color_num,
          caption = paste0(variant_count, " Participanten | Klengst Polygoner: Kanton\n© Uni Lëtzebuerg | generéiert ", date())
     ) +
     theme_void() +
-    theme(plot.title = element_text(size=16, hjust = 0.5, face="bold"),
+    theme(plot.title = element_text(size=18, hjust = 0.5, face="bold", margin = margin(0, 0, 20, 0)),
           plot.caption = element_text(size=12),
           legend.position =  "bottom",
           legend.text = element_text(size=12),
           legend.title = element_text(size=12, face = "bold"),
-          strip.text = element_text(size=12)) +
-    facet_wrap(. ~ Alter)
+          strip.text = element_text(size = 13, face = "bold"), # set strip.text to bold and size 12
+          ) +
+  
+    facet_wrap(. ~ Alter, labeller = as_labeller(my_labeller), scales = "fixed"
+    )
   
   # Save maps
   #qsave(p, file = paste0("Iwwerbleckskaarten_Alter_", map_title, ".qs"))
@@ -366,7 +387,7 @@ make_summary_plot_age <- function(dataset, lsa_map_number, selection, color_num,
   return(p)
 }
 
-#Function Variantekaarten #
+### Function Variantekaarten #
 make_plot <- function(dataset, variable, color) {
   
   # Get count of all observations
