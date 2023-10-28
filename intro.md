@@ -2,7 +2,11 @@
 
 An dësem Atlas fannt Dir déi éischt Kaarten aus eisem [Schnëssen-Projet](https://infolux.uni.lu/schnëssen). Pro Kaart sinn d'Opname vu 500 bis 2000 Leit verschafft an domat kritt een eng zimmlech zouverlässeg Impressioun vun der haiteger Variatioun am Lëtzebuergeschen. Gläichzäiteg kann een un de Kaarten a Visualiséierungen ofliesen, wéi staark d'Lëtzebuergescht am Moment amgaang ass sech ze veränneren.
 
-<div><img src="www/Beispill_Nuecht.png" width="70%" /></div>
+ <br/><br/>
+
+<img src="www/Beispill_Nuecht.png" width="70%"  style="box-shadow: 3px 3px 3px gray;" />
+
+ <br/><br/>
 
 An dëser éischter Editioun hu mir ca. **700** verschidde Kaarten ausgewielt.
 
@@ -15,5 +19,3 @@ Donieft fannt Dir Grafike fir d'Verdeelung par rapport zu Alter, Geschlecht, Dia
 Iwwer 'Audio' kann een all eenzel Audioopnam lauschteren.
 
 D'Auswäertung ass ëmmer nach amgaang an no an no wäerte sech déi eventuell wäiss Plazen op verschiddene Kaarten nach fëllen.
-
-Um Handy leeft dëse Site nach net optimal.

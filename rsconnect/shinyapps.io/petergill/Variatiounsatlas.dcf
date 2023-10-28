@@ -1,0 +1,11 @@
+name: Variatiounsatlas
+title: Variatiounsatlas
+username:
+account: petergill
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 9655188
+bundleId: 7860793
+url: https://petergill.shinyapps.io/Variatiounsatlas/
+asMultiple: FALSE
+asStatic: FALSE

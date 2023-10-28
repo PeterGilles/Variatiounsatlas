@@ -1,18 +1,8 @@
-# # List of required packages
-# required_packages <- c("tidyverse", "sf", "cowplot", "patchwork", "scales",
-#                        "jpeg", "magick", "raster", "mapproj", "DT", "googlesheets4",
-#                        "waiter", "qs", "shinydashboard", "shinydashboardPlus", "markdown",
-#                        "ggiraph", "gfonts", "shinycssloaders", "partykit", "gganimate")
-# 
-# # Install the packages that are not installed
-# new_packages <- required_packages[!required_packages %in% installed.packages()[, "Package"]]
-# if (length(new_packages) > 0) {
-#   install.packages(new_packages)
-# }
-
 library(tidyverse)
-#library(sf)
-library(cowplot) # creates too large objects!
+options("sp_evolution_status"=2)
+library(sp)
+library(sf)
+library(cowplot) # creates too large objects! used for ggdraw
 library(patchwork) # smaller objects
 library(scales)
 library(jpeg)
@@ -20,21 +10,16 @@ library(magick) # for LSA maps
 library(raster)
 library(mapproj)
 library(DT)
-library(googlesheets4)
+#library(googlesheets4)
 library(waiter)
 library(qs)
-library(shinydashboard)
-library(shinydashboardPlus)
+library(bslib)
+library(shinycssloaders)
 library(markdown)
 library(ggiraph)
 library(gfonts)
-library(shinycssloaders)
-#library(partykit)
-#library(gganimate)
-
-#library(randomForest)
-#library(moreparty)
-#library(varImp)
+library(googlesheets4)
+library(fontawesome)
 
 ## Some settings
 # 1. load paths externally
@@ -62,8 +47,8 @@ SERVER <- filter(paths, name == "SERVER") %>%
 #   variants = c("regular", "italic", "700", "700italic"), 
 #   prefer_local_source = FALSE)
 
-use_font("roboto", "fonts/css/roboto.css")
-validated_fonts(list(sans = "roboto", serif = "roboto"))
+#use_font("roboto", "fonts/css/roboto.css")
+#validated_fonts(list(sans = "roboto", serif = "roboto"))
 
 preloader <- list(html = tagList(spin_1(), "De Variatiounsatlas gëtt gelueden ..."), color = "#343a40")
 
@@ -86,7 +71,7 @@ preloader <- list(html = tagList(spin_1(), "De Variatiounsatlas gëtt gelueden .
 
 # load prepared polygon data for cantons and communes
 cantons_df <- readRDS("cantons_df.RDS")
-#communes_df <- readRDS("communes_df.RDS")
+communes_df <- readRDS("communes_df.RDS")
 
 # Weider Elementer fir d'Kaartéierung
 # rivers <- readRDS("river.RDS")
@@ -101,12 +86,19 @@ cantons_df <- readRDS("cantons_df.RDS")
 
 color_palette <- c('#56cc9d','#beaed4','#fdc086','#ffff99','#386cb0','#f0027f','#bf5b17','#666666')
 
-# faster - load from local csv
+# update Kaartesettings from Google Docs    
+# gs4_deauth()
+# variables <- range_read(ss = "1IDtvxHgccWg2JMu-dqJyqsCpwsurpYLOgm6rfE0mMGU", sheet = "kaartesettings", col_names=T, col_types = "c") %>%
+#  filter(active == "yes") %>%
+#  arrange(map_category, input_choice) %>%
+#   write_csv(file = "./Variatiounsatlas/kaartesettings.csv")
+
+# load Kaartesettings from local csv
 variables <- read.csv("kaartesettings.csv") %>%
   filter(active == "yes") %>%
-  arrange(map_category, input_choice)
+  arrange(map_category, input_choice, .locale = "de")
 
-## Functions
+# Functions
 make_choices <- function(category) {
   choices <- variables %>%
     #dplyr::filter(map_category == {{category}}) %>%
@@ -119,6 +111,19 @@ make_choices <- function(category) {
   #             selectize = FALSE,
   #             size = 25)
 }
+
+# make_choices <- function(category) {
+#   choices <- variables %>%
+#     dplyr::filter(map_category == {{category}}) %>%
+#     dplyr::select(variable, input_choice) %>%
+#     arrange(input_choice)
+#   choices <- set_names(choices$variable, choices$input_choice)
+#   #choices
+#   # selectInput(inputId = category, label = h3(category),
+#   #             choices = choices,
+#   #             selectize = FALSE,
+#   #             size = 25)
+# }
 
 # Function frequencies of variants
 plot_freq_variants <- function(data, variable, selection, caption = "") {
@@ -203,10 +208,11 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
          x = "", y = "",
          caption = paste0(variant_count, " Participanten | Klengst Polygoner: ", word(geo_type, 1, sep = "_"), "\n© Uni Lëtzebuerg | generéiert ", date())
     ) +
-    theme_void(base_family = "sans") +
+    #theme_void(base_family = "sans") +
+    theme_void() +
     theme(plot.title = element_text(size=38, hjust = 0.5, face="bold"),
           plot.caption = element_text(size=26),
-          legend.position =  c(0.9, 0.8),
+          legend.position =  c(0.8, 0.9),
           legend.text = element_text(size=34),
           legend.title = element_text(size=35, face = "bold"))
   
@@ -226,7 +232,7 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
     
     plot_row <- girafe(code = print(plot_row),
                        width_svg = 27, height_svg = 18,
-                       fonts = list(sans = "roboto"),
+                       #fonts = list(sans = "roboto"),
                        options = list(
                          opts_hover(css = "fill:#FF3333;stroke:black;cursor:pointer;", reactive = TRUE),
                          opts_selection(
@@ -235,7 +241,7 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
   #without LSA map
     plot_row <- girafe(code = print(p),
                        width_svg = 20, height_svg = 24,
-                       fonts = list(sans = "Sans"),
+                       #fonts = list(sans = "Sans"),
                        options = list(
                          opts_hover(css = "fill:#FF3333;stroke:black;cursor:pointer;", reactive = TRUE),
                          opts_selection(
@@ -247,68 +253,8 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
   #ggsave(plot = p, filename = paste0(map_title, ".pdf"), units = "cm", width = 22)
   #ggsave(plot = plot_row, filename = paste0(map_title, "_mat_LSA.pdf"), device="pdf", dpi=400, units = "cm", width = 28)
   
-  qsave(plot_row, file = paste0("Iwwerbleckskaart_", map_title, ".qs"))
+  qsave(plot_row, file = paste0("./overview_maps/Iwwerbleckskaart_", map_title, ".qs"))
   return(plot_row)
-}
-
-#######################################
-# Function Iwwerbléckskaart Animation #
-#######################################
-
-make_summary_plot_age_dynamic <- function(dataset, lsa_map_number, selection, color_num, map_title, item_number ="", item_text = "", geo_type) {
-  
-  color <- color_palette[1:color_num]
-  # TODO remove '_' from selection
-  #selection <- str_replace(selection, "_", "")
-  
-  # get count of all observations
-  variant_count <- dataset %>% distinct(id, total)
-  variant_count <- sum(variant_count$total)
-  
-  dataset <- dataset %>%
-    group_by(id, Alter) %>%
-    mutate(prozent = n/total) %>%
-    filter(n == max(n)) %>%
-    mutate(max_variant = variants) 
-  
-  p <-  ggplot() +
-    
-  # variant data
-  geom_polygon(data = dataset, aes(x = long, y = lat, fill=max_variant, group = id),
-                           # alpha per polygon steered by percentage, if not useful, set alpha back to 0.8
-                           linewidth=0, alpha = dataset$prozent) +
-    # borders of cantons
-    geom_polygon(data = cantons_df, aes(x = long, y = lat, group = id),
-                 linewidth= .1, colour = "#a9a9a9", fill = NA) +
-    coord_map() +
-    scale_colour_identity() +
-    scale_fill_manual(values = color[1:color_num],
-                      breaks = selection) +
-    labs(title = paste("Variabel: ", word(map_title, 2, sep="_")),
-         fill = paste0("Haaptvariant\npro ", word(geo_type, 1, sep = "_")),
-         x = "", y = "",
-         caption = paste0(variant_count, " Participanten | Klengst Polygoner: Kanton\n© Uni Lëtzebuerg | generéiert ", date())
-    ) +
-    #theme_void(base_family = "sans") +
-    theme(plot.title = element_text(size=16, hjust = 0.5, face="bold"),
-          plot.caption = element_text(size=11),
-          legend.position =  c(0.9, 0.8),
-          legend.text = element_text(size=11),
-          legend.title = element_text(size=12, face = "bold"))
-  
-  
-  anim <- p +
-    transition_manual(factor(Alter, 
-                             levels = c('eeler', 'mëttel-al', 'jonk'))
-                      ) +
-    ggtitle('Alter {current_frame}')
-  
-  # save the animation
-  anim_save(paste0("Iwwerbleckskaart_age_animation_", map_title, ".gif"), animate(anim, duration = 5, fps=5, start_pause = 2, height = 700))
-  
-  # Return a list containing the filename
-  # this can be displayed then with imageOutput
-  list(src = paste0("Iwwerbleckskaart_age_animation_", map_title, ".gif"), contentType = "image/gif")
 }
 
 ########################################
@@ -368,7 +314,7 @@ make_summary_plot_age <- function(dataset, lsa_map_number, selection, color_num,
          x = "", y = "",
          caption = paste0(variant_count, " Participanten | Klengst Polygoner: Kanton\n© Uni Lëtzebuerg | generéiert ", date())
     ) +
-    theme_void() +
+    theme_void(base_family = "Roboto") +
     theme(plot.title = element_text(size=18, hjust = 0.5, face="bold", margin = margin(0, 0, 20, 0)),
           plot.caption = element_text(size=12),
           legend.position =  "bottom",
@@ -381,7 +327,7 @@ make_summary_plot_age <- function(dataset, lsa_map_number, selection, color_num,
     )
   
   # Save maps
-  #qsave(p, file = paste0("Iwwerbleckskaarten_Alter_", map_title, ".qs"))
+  #qsave(p, file = paste0("./overview_maps/Iwwerbleckskaarten_Alter_", map_title, ".qs"))
   
   # return maps
   return(p)
