@@ -115,6 +115,16 @@ ui <- function(request) {
                 nav_panel("Sproochlech Aflëss", plotOutput("plotAfloss"))
               ),
     
+              card(
+                card_header(tags$b("Random Forest - Variable Importance")),
+                card_body(
+                  # Plot Random Forest tree
+                  # deactivated because of performance issues
+                  #plotOutput("plotTree"),
+                  # Plot Variable Importance
+                  plotOutput("plotVariableImportance"))
+              ),
+    
               navset_card_tab(
                 title = tags$b("Sozio-demografesch facteure vun der Gemeng"),
 
@@ -579,32 +589,29 @@ server <- function(input, output, session) {
     
   }) 
   
-  # reactive function for google data for mixed model
-  data_regression <- reactive({
-    max_var <- most_frequent_variant()
-    str(max_var)
-    var <- variable()
-    print(var)
-    data <- google_df() %>% 
-      dplyr::mutate(temp_variable = if_else(var == max_var, 1, 0))
-    print(summary(data))
-  })
+  # TODO
+  # # reactive function for google data for mixed model
+  # data_regression <- reactive({
+  #   max_var <- most_frequent_variant()
+  #   str(max_var)
+  #   var <- variable()
+  #   print(var)
+  #   data <- google_df() %>% 
+  #     dplyr::mutate(temp_variable = if_else(var == max_var, 1, 0))
+  #   print(summary(data))
+  # })
   
   # plot function Sprooch & Educatiouns-Index
   output$plotLangEduIndex <- renderPlot({
     
-    # calculate mixed model for most frequent variant
-    #index.lm <- lm(temp_variable ~ `Sprooch & Educatioun-Index`, data = data_regression())
-    
-    caption = paste("Dësen Index kalkuléiert dat sproochlecht mat dem Ausbildungskapital:\n
-                    Kompetenz am Däitschen (20 %), Kompetenz am Franséischen (30 %), Ausbildung (50 %).\n
-                    Den Index rangéiert tëschent 0 an 1 (=maximaalt Kapital, i.e. béid Sproochkompetenzen maximal, Ausbildung: Universitéit/Fachhéichschoul)")
+    caption = paste("Dësen Index kombinéiert dat sproochlecht mat dem Ausbildungskapital:\n
+                    Kompetenz am Däitschen (20 %), Kompetenz am Franséischen (40 %), Ausbildung (40 %).\n
+                    Den Index rangéiert tëschent 0 an 1 (= maximaalt Kapital, i.e. béid Sproochkompetenzen maximal, Ausbildung: Universitéit/Fachhéichschoul)")
     
     plot_social_categories(data = google_df() %>%
                              # only Mammesproochler
-                             filter(Mammesprooch == "Jo") %>%
-                             # round the index to the nearest bin value
-                             mutate(`Sprooch & Educatioun-Index` = round(`Sprooch & Educatioun-Index` * 5) / 5), `Sprooch & Educatioun-Index`, variable = variable(), selection = selection(), caption = caption)
+                             filter(Mammesprooch == "Jo"),
+                             `Sprooch & Educatioun-Index`, variable = variable(), selection = selection(), caption = caption)
     
   })
   
@@ -703,18 +710,18 @@ server <- function(input, output, session) {
     plot_decision_tree(data = google_df(), variable = variable(), selection = selection())
   })
   
-  # # plot variable importance from random forest
-  # output$plotVariableImportance <- renderPlot({
-  #   
-  #   if(file.exists(paste0(variable(), "_VariableImportance.qs"))) {
-  #     print("lokal VariableImportance")
-  #     qread(paste0(variable(), "_VariableImportance.qs"))
-  #   }
-  #   else {
-  #     print("VariableImportance gëtt generéiert")
-  #     plot_VariableImportance(data = google_df(), variable = variable(), selection = selection())
-  #  }
-  # })
+  # plot variable importance from random forest
+  output$plotVariableImportance <- renderPlot({
+
+    if(file.exists(paste0(variable(), "_VariableImportance.qs"))) {
+      print("lokal VariableImportance")
+      qread(paste0(variable(), "_VariableImportance.qs"))
+    }
+    else {
+      print("VariableImportance gëtt generéiert")
+      plot_VariableImportance(data = google_df(), variable = variable(), selection = selection())
+   }
+  })
   
   # plot function Audio
   output$plotAudio <- renderDT({

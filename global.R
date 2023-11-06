@@ -20,6 +20,8 @@ library(ggiraph)
 library(gfonts)
 library(googlesheets4)
 library(fontawesome)
+library(randomForest)
+#library(party)
 
 ## Some settings
 # 1. load paths externally
@@ -315,7 +317,9 @@ make_summary_plot_age <- function(dataset, lsa_map_number, selection, color_num,
          caption = paste0(variant_count, " Participanten | Klengst Polygoner: Kanton\n© Uni Lëtzebuerg | generéiert ", date())
     ) +
     theme_void(base_family = "Roboto") +
-    theme(plot.title = element_text(size=18, hjust = 0.5, face="bold", margin = margin(0, 0, 20, 0)),
+    # potential error in connection with randomForest for 'margin', hence ggplot2::margin
+    # see: https://github.com/tidyverse/ggplot2/issues/2150
+    theme(plot.title = element_text(size=18, hjust = 0.5, face="bold", margin = ggplot2::margin(0, 0, 20, 0)),
           plot.caption = element_text(size=12),
           legend.position =  "bottom",
           legend.text = element_text(size=12),
@@ -449,136 +453,76 @@ plot_social_categories <- function(data, social_category, variable, selection, c
 
 # Function for decision tree
 plot_decision_tree <- function(data, variable, selection) {
-  
-  cond_df <-  data %>%
-    dplyr::filter(Muttersprache != "Neen") %>%
-    dplyr::select(variable = {{variable}}, Alter, Geschlecht, Dialektgebiet, Ausbildung, Urbanisatioun) %>%
-    # mutate(Ausbildung = recode(Ausbildung, 
-    #                           "Lycée\ntechnique" = "Lycée technique",
-    #                           "just\nPrimaire" = "just Primaire",
-    #                           "Lycée\nclassique" = "Lycée classique",
-    #                           "Fachhéichschoul/\nUniversitéit" = "Fachhéichschoul/Universitéit")) %>%
+
+  cond_df <- data %>%
+    dplyr::filter(Mammesprooch != "Neen") %>%
+    dplyr::select(variable = {{variable}}, Alter, Geschlecht, Dialektgebiet, Index = `Sprooch & Educatioun-Index`) %>%
     dplyr::filter((variable) %in% selection) %>%
-    mutate(variable = as.factor(variable)) %>%
+    na.omit() %>%
     # filter variants above a certain frequency level
     group_by(variable) %>%
-    filter(n()/nrow(data) >= 0.02) %>%
-    ungroup() %>%
-    na.omit() 
+    dplyr::filter(n()/nrow(data) >= 0.04) %>%
+    ungroup()
   
-  #  cond_df[sapply(cond_df, is.character)] <- lapply(cond_df[sapply(cond_df, is.character)], as.factor)
+  # tab <- cond_df %>%
+  #   group_by(variable) %>%
+  #   count(variable, name = "count_variant") 
+  # print(tab)
+  
+  cond_df[sapply(cond_df, is.character)] <- lapply(cond_df[sapply(cond_df, is.character)], as.factor)
+  
+  # age as ordered factor
+  ageorder <- c("≤ 24", "25 bis 34", "35 bis 44", "45 bis 54", "55 bis 64", "65+")
+  cond_df$Alter <- factor(cond_df$Alter,
+                            ordered = is.ordered(ageorder))
+  
+  # mutate Index in forest_df as ordered factor
+  indexorder <- c("<= 0.4", "0.6", "0.8", "1")
+  cond_df$Index <- factor(cond_df$Index,
+                            ordered = is.ordered(indexorder))
   
   set.seed(1234)
-  # '~ . = take all variables available, if not single variables have to be listed
-  # ~ . works only, when all variables a factors (not character)
   
-  cond_tree <- ctree(formula = variable ~ Alter + Geschlecht + Dialektgebiet + Ausbildung + Urbanisatioun,
-                     data = cond_df, 
+  cond_tree <- ctree(formula = variable ~ Alter + Geschlecht + Dialektgebiet + Index + Alter:Geschlecht + Alter:Dialektgebiet + Alter:Index + Geschlecht:Dialektgebiet + Geschlecht:Index + Dialektgebiet:Index,
+                     data = cond_df,
                      control = ctree_control(testtype = "Univariate", minbucket = 20))
   
   # plot tree
   plot(cond_tree)
   
-  # # ggparty
-  # library(ggparty)
-  # ggparty(cond_tree) +
-  #   geom_edge() +
-  #   geom_edge_label() +
-  #   geom_node_splitvar() +
-  #   # pass list to gglist containing all ggplot components we want to plot for each
-  #   # (default: terminal) node
-  #   geom_node_plot(gglist = list(geom_bar(aes(x = "", fill = play),
-  #                                         position = position_fill()),
-  #                                xlab("play")))
-  
-  # decision rules
-  # how to display them?
-  # fit <- rpart::rpart(
-  #   formula = variable ~ Alter + Geschlecht + Dialektgebiet,
-  #   data = cond_df,
-  #   method = "class",
-  #   control = rpart::rpart.control(cp = 0.05)
-  # )
-  # party_obj <- as.party.rpart(fit, data = TRUE)
-  # decisions <- partykit:::.list.rules.party(party_obj)
-  # 
-  # paste(decisions, collapse = "\n")
 }
 
 # Function for RF variable importance
 plot_VariableImportance <- function(data, variable, selection) {
-  
+
   forest_df <-  data %>%
-    filter(Muttersprache != "Neen") %>%
-    dplyr::select(variable = {{variable}}, Alter, Geschlecht, Dialektgebiet, Ausbildung, KompetenzDäitsch = `Kompetenz am Däitschen`, KompetenzFranséisch = `Kompetenz am Franséischen`, SproochlechAflëss = `Sproochlech Aflëss`) %>%
+    filter(Mammesprooch != "Neen") %>%
+    dplyr::select(variable = {{variable}}, Alter, Geschlecht, Dialektgebiet, Index = `Sprooch & Educatioun-Index`) %>%
     dplyr::filter((variable) %in% selection) %>%
+    na.omit() %>%
     # filter variants above a certain frequency level
     group_by(variable) %>%
-    filter(n()/nrow(data) >= 0.02) %>%
-    ungroup() %>%
-    na.omit() 
-  
+    filter(n()/nrow(data) >= 0.04) %>%
+    ungroup() 
+        
   forest_df[sapply(forest_df, is.character)] <- lapply(forest_df[sapply(forest_df, is.character)], as.factor)
-  
+
   # age as ordered factor
   ageorder <- c("≤ 24", "25 bis 34", "35 bis 44", "45 bis 54", "55 bis 64", "65+")
   forest_df$Alter <- factor(forest_df$Alter,
                             ordered = is.ordered(ageorder))
   
-  komporder <- c(1:7)
-  forest_df$KompetenzDäitsch <- factor(forest_df$KompetenzDäitsch,
-                                       ordered = is.ordered(komporder))
-  forest_df$KompetenzFranséisch <- factor(forest_df$KompetenzFranséisch,
-                                          ordered = is.ordered(komporder))
+  # mutate Index in forest_df as ordered factor
+  indexorder <- c("<= 0.4", "0.6", "0.8", "1")
+  forest_df$Index <- factor(forest_df$Index,
+                            ordered = is.ordered(indexorder))
   
-  set.seed(1234)
-  # '~ . = take all variables available, if not single variables have to be listed
-  # ~ . works only, when all variables a factors (not character)
+  # Random forest model
+  rf <- randomForest(variable ~ Alter + Geschlecht + Dialektgebiet + Index + Alter:Geschlecht + Alter:Dialektgebiet + Alter:Index + Geschlecht:Dialektgebiet + Geschlecht:Index + Dialektgebiet:Index, 
+                     data=forest_df, importance=TRUE, ntree=2000, keep.forest=FALSE)
   
-  # grow the trees in the forest
-  # '~ .' klappt hier für varimp aus irgendeinem Grund nicht!
-  # partykit funktioniert nicht richtig, party geht
-  forest <- party::cforest(formula = variable ~ Alter + Geschlecht + Dialektgebiet + KompetenzDäitsch +
-                             KompetenzFranséisch + Ausbildung,
-                           data = forest_df,
-                           controls=party::cforest_unbiased(mtry=2, ntree=500))
-  
-  #  foret <- party::cforest(Survived~., data=titanic, controls=party::cforest_unbiased(mtry=2,ntree=500))
-  
-  # calculate variable importance
-  #cond_varimp <- party::varimp(forest, conditional = TRUE)
-  #sortedVarimp = sort(cond_varimp)
-  
-  importance <- varImp(forest, conditional = TRUE)
-  importance %>% round(3)
-  
-  #round(cond_varimp, 3)
-  plot <- ggVarImp(importance)
-  #plot <- dotchart(sortedVarimp, main = "Conditional importance of variables")
-  
-  
-  # # Random forest model
-  # rf <- randomForest(variable ~ ., data=forest_df, importance=TRUE, ntree=1000, keep.forest=FALSE)
-  # # plot Variable Importance
-  # varImpPlot(rf, main = "Variable Importance")
-  
-  # # Get importance values as a data frame
-  # imp = as.data.frame(importance(rf))
-  # imp = cbind(vars=rownames(imp), imp)
-  # imp = imp[order(imp$MeanDecreaseAccuracy),]
-  # imp$vars = factor(imp$vars, levels=unique(imp$vars))
-  # 
-  # plot <- imp %>%
-  #   pivot_longer(cols=matches("Mean")) %>%
-  #   ggplot(aes(value, vars)) +
-  #   geom_col() +
-  #   geom_text(aes(label=round(value), x=0.5*value), size=3, colour="white") +
-  #   facet_grid(. ~ name, scales="free_x") +
-  #   scale_x_continuous(expand=expansion(c(0,0.04))) +
-  #   theme_bw() +
-  #   theme(panel.grid.minor=element_blank(),
-  #         panel.grid.major=element_blank(),
-  #         axis.title=element_blank())
+  # plot Variable Importance
+  varImpPlot(rf, main = "Variable Importance", type = 1) # type = 1: mean decrease in accuracy
   
   # save
   #qsave(plot, file = paste0(variable, "_VariableImportance.qs"))

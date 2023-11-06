@@ -26,6 +26,7 @@ yes,12,raw_table_12,Foneetik,Duerf,Duerf ⓁⓈⒶ,Claude Schmit hat das schöns
 yes,65,raw_table_65,Foneetik,Dënsch(deg] [Palataliséierung],Dënsch(deg] [Palataliséierung] ⓁⓈⒶ,Am Dienstag war Julie noch mal bei H&M und hat die rote Hose angezogen.,Variant_Palataliséierung_Dënschdeg,Dënschdeg/Daaschdeg Dënsdeg/Dasdeg,154,ⓁⓈⒶ,NA,NA
 yes,46,raw_table_46,Foneetik,Eeër,Eeër ⓁⓈⒶ,Mein Sohn hat ganz alleine Pfannkuchen mit Milch und Eiern gemacht.,Variant_Eeër,Eeër [ɛː:ɐ] [ɑɪ]er,136,ⓁⓈⒶ,NA,NA
 yes,312,raw_table_312,Foneetik,Elektriker,Elektriker,Der gut gelaunte Elektriker hat mir zugewunken.,Variant_Elektriker,ELEKtriker ElekTRIker,NO,NA,NA,NA
+yes,605,raw_table_605,Foneetik,Emoji,Emoji,[Bildbeschreiwung],Variant_Emoji,Em[oː]ji Em[o]ji Smiley Em[əʊ]ji,NO,NA,NA,NA
 yes,71,raw_table_71,Foneetik,Flilleken,Flilleken,Auch die kleinsten Vögelchen haben Flügel.,Variant_Flilleken,Flilleken Fli[ʑ]elen Fli[ʑ]el Frilleken Flilliken Fliniken,NO,NA,NA,NA
 yes,6,raw_table_6,Foneetik,Fra,Fra ⓁⓈⒶ,Eine Frau hat am Freitag die schwarzen Kleider genäht.,Variant_Fra,Fra Fr[ɔː] Fr[ɑʊ],148,ⓁⓈⒶ,NA,NA
 yes,6,raw_table_6,Foneetik,Freideg,Freideg ⓁⓈⒶ,Eine Frau hat am Freitag die schwarzen Kleider genäht.,Variant_Freitag,Freideg/Freides Freidig Freiden Fregdeg/Fregdes Fregdig Freddeg/Freddes,109,ⓁⓈⒶ,NA,NA
@@ -285,7 +286,7 @@ yes,161,raw_table_161,Foneetik,noosten,noosten,Bei einer Safari kam Noémie den 
 yes,177,raw_table_177,Foneetik,nächst,nächst,Die nächsten drei Wochenenden müssen wir nicht so früh aufstehen.,Variant_nächst_Vokal,n[ä]chst n[eː]chst n[i]chst,NO,NA,NA,NA
 yes,122,raw_table_122,Foneetik,nächsten,nächsten,Im nächsten Januar fahren die anderen hinauf in die Berge.,Variant_nächsten,n[æ]chsten n[eː]chsten,NO,NA,NA,NA
 yes,62,raw_table_62,Foneetik,näischt,näischt ⓁⓈⒶ,Deine Tipps haben zu nichts geführt.,Variant_näischt,näischt näist néist naischt,153,ⓁⓈⒶ,NA,NA
-yes,60,raw_table_60,Foneetik,néng,néng ⓁⓈⒶ,Je ne crois pas qu'ils viennent demain à 9 heures.,Variant_néng,néng ning nein,133,ⓁⓈⒶ,NA,NA
+yes,60,raw_table_60,Foneetik,néng,néng ⓁⓈⒶ,Je ne crois pas qu'ils viennent demain à 9 heures.,Variant_néng,néng ning n[ɑɪ]n,133,ⓁⓈⒶ,NA,NA
 yes,85,raw_table_85,Foneetik,och,och ⓁⓈⒶ,"Claudine Schroeder's Katze will euch nicht beißen, auch wenn sie böse schaut.",Variant_och,och o,165,ⓁⓈⒶ,NA,NA
 yes,423,raw_table_423,Foneetik,perfekt,perfekt,Letztes Jahr hatten wir perfektes Herbstwetter.,Variant_perfekt,perfekt perfekten perfektent,NO,NA,NA,NA
 yes,732,raw_table_732,Foneetik,rechen! [n-Reegel],rechen! [n-Reegel],"Rechne schnell die neuen Zahlen aus, damit wir auf das Schlimmste vorbereitet sind!",Variant_rechen_n-Reegel,reche_(séier) rechen_(séier),NO,NA,NA,NA
@@ -422,10 +423,10 @@ yes,315,raw_table_315,Grammatik,ausverkaaften [Adjektiv],ausverkaaften [Adjektiv
 yes,372,raw_table_372,Grammatik,befuelen [Partizip],befuelen [Partizip],"Im Examen haben die Majore den Soldaten befohlen, auf das richtige Signal zu warten.",Variant_befuelen,befuel befuelen befolen befuelt,NO,NA,NA,NA
 yes,48,raw_table_48,Grammatik,bescht [Femininum Singular],bescht [Femininum Singular],Ta meilleure amie a couru sa première course; elle était la plus rapide.,Variant_bescht2,bescht beschten,NO,NA,NA,NA
 yes,169,raw_table_169,Grammatik,bliwwen,bliwwen ⓁⓈⒶ,"Beim Hundertmeterlauf ist sie unter 11,2 Sekunden geblieben.",Variant_bliwwen,bliwwen bliff gebliwwen bl[iː]f bl[iː]wen,055,ⓁⓈⒶ,NA,NA
+yes,60,raw_table_60,Grammatik,dass (en) [Complementizer Agreement],dass (en) [Complementizer Agreement],Je ne crois pas qu'ils viennent demain à 9 heures.,Variant_datt_en,datt dass datt_e(n) dass_e(n),NO,NA,NA,NA
+yes,166,raw_table_166,Grammatik,dass (en) [Complementizer Agreement],dass (en) [Complementizer Agreement],"In einer Demokratie sollte man darauf achten, dass die öffentlichen Räume möglichst geschützt sind.",Variant_datt_en2,datt dass datt_en dass_en,NO,NA,NA,NA
 yes,38,raw_table_38,Grammatik,dat (kaalt Waasser),dat (kaalt Waasser),Der alte Mann ist in das kalte Wasser gefallen.,Variant_d',d' dat,NO,NA,NA,NA
 yes,92,raw_table_92,Grammatik,dat do,dat do,Das da würde jeden zweifeln lassen.,Variant_dat_do,dat_do dat_doten dat_doen dat,NO,NA,NA,NA
-yes,60,raw_table_60,Grammatik,datt (en) [Complementizer Agreement],datt (en) [Complementizer Agreement],Je ne crois pas qu'ils viennent demain à 9 heures.,Variant_datt_en,datt dass datt_e(n) dass_e(n),NO,NA,NA,NA
-yes,166,raw_table_166,Grammatik,datt (en) [Complementizer Agreement],datt (en) [Complementizer Agreement],"In einer Demokratie sollte man darauf achten, dass die öffentlichen Räume möglichst geschützt sind.",Variant_datt_en2,datt dass datt_en dass_en,NO,NA,NA,NA
 yes,432,raw_table_432,Grammatik,den (leschte Summer) [Zäitangab],den (leschte Summer) [Zäitangab],Im letzten Sommer war ich mit meiner Schwiegertochter auf einem großen Schiff.,Variant_e_leschte_Summer,den ∅ en am d' um,NO,NA,NA,NA
 yes,38,raw_table_38,Grammatik,den/deen (Mann),den/deen (Mann) ⓁⓈⒶ,Der alte Mann ist in das kalte Wasser gefallen.,Variant_den1,den deen,045,ⓁⓈⒶ,NA,NA
 yes,144,raw_table_144,Grammatik,domat,domat,Damit steht fest: Melanies Ideen sind die innovativsten von allen.,Variant_domat2,domat domadder domadden,NO,NA,NA,NA
@@ -592,10 +593,10 @@ yes,124,raw_table_124,Lautkontakt,V [Buschtaf],V [Buschtaf],[Bildbeschreiwung],V
 yes,177,raw_table_177,Lautkontakt,Weekend,Weekend,Die nächsten drei Wochenenden müssen wir nicht so früh aufstehen.,Variant_Weekenter_Anlaut,[v]eekender [w]eekender,NO,NA,NA,NA
 yes,42,raw_table_42,Lautkontakt,Weekend [Vermëllung],Weekend [Vermëllung],Sie hat sich am Wochenende zwei DVDs gekauft.,Variant_Weekend_Vermëllung,Wee[k]end Wee[g]end,NO,NA,NA,NA
 yes,422,raw_table_422,Lautkontakt,Zyklus,Zyklus,Ich kenne das Wort Zyklus aus der Ökonomie.,Variant_Zyklus,[tsy]klus [tsi]klus [tsikəl],NO,NA,NA,NA
-yes,164,raw_table_164,Lautkontakt,datt,datt,"Hier muss man aufpassen, dass man nicht mit dem Kopf gegen die Decke rennt.",Variant_datt,datt dass,NO,NA,NA,NA
-yes,166,raw_table_166,Lautkontakt,datt,datt,"In einer Demokratie sollte man darauf achten, dass die öffentlichen Räume möglichst geschützt sind.",Variant_datt3,datt dass,NO,NA,NA,NA
-yes,304,raw_table_304,Lautkontakt,datt,datt,"Hast du gehört, dass der Guy Reuter in seiner Jugend viel herumgeschrien hat?",Variant_datt2,datt dass,NO,NA,NA,NA
-yes,355,raw_table_355,Lautkontakt,datt,datt,"Wir informieren Sie hiermit, dass die Schule am 13. Juni ausfällt.",Variant_datt4,datt dass,NO,NA,NA,NA
+yes,164,raw_table_164,Lautkontakt,dass,dass,"Hier muss man aufpassen, dass man nicht mit dem Kopf gegen die Decke rennt.",Variant_datt,datt dass,NO,NA,NA,NA
+yes,166,raw_table_166,Lautkontakt,dass,dass,"In einer Demokratie sollte man darauf achten, dass die öffentlichen Räume möglichst geschützt sind.",Variant_datt3,datt dass,NO,NA,NA,NA
+yes,304,raw_table_304,Lautkontakt,dass,dass,"Hast du gehört, dass der Guy Reuter in seiner Jugend viel herumgeschrien hat?",Variant_datt2,datt dass,NO,NA,NA,NA
+yes,355,raw_table_355,Lautkontakt,dass,dass,"Wir informieren Sie hiermit, dass die Schule am 13. Juni ausfällt.",Variant_datt4,datt dass,NO,NA,NA,NA
 yes,29,raw_table_29,Lautkontakt,genial,genial,"Ta soeur est géniale, elle raconte souvent les meilleures blagues!",Variant_genial_Aussprooch,[ʒ]enial [g]enial,NO,NA,NA,NA
 yes,171,raw_table_171,Lautkontakt,googelen,googelen,Ich google nur noch schnell nach dem Namen dieser Offizierin.,Variant_googelen,g[u]gelen g[uː]gelen g[u]glen g[uː]glen,NO,NA,NA,muss iwwerpréift ginn
 yes,81,raw_table_81,Lautkontakt,psychologesch,psychologesch,Depuis 1960 Camille Weber s'informe sur des thèmes psychologiques.,Variant_psychologesch,ps[ik]olo[g]esch ps[ik]olo[ʁ]esch ps[iɕ]olo[g]esch ps[iɕ]olo[ʁ]esch ps[yk]olo[ʁ]esch ps[yk]olo[g]esch  ps[yk]olo[g]esch ps[yk]olo[ʁ]esch,NO,NA,NA,NA
@@ -688,6 +689,7 @@ yes,88,raw_table_88,Wuertschatz,Këssen,Këssen,[Bildbeschreiwung],Variant_Këss
 yes,26,raw_table_26,Wuertschatz,Kürbis,Kürbis,[Bildbeschreiwung],Variant_Kürbis,Kürbis Kalbass Kierb[i]/[e]s Potiron,NO,NA,NA,NA
 yes,66,raw_table_66,Wuertschatz,Lautsprecher,Lautsprecher,[Bildbeschreiwung],Variant_Lautsprecher,Lautsprecheren Haut-Parleuren Boxen Musek(s)boxen,NO,NA,NA,NA
 yes,361,raw_table_361,Wuertschatz,Leedung,Leedung,Unter eigener Leitung konnte Serge die Kapazität steigern.,Variant_Leedung,Leedung Leitung,NO,NA,NA,NA
+yes,322,raw_table_322,Wuertschatz,Louche,Louche,[Bildbeschreiwung],Variant_Zoppeläffel,(Zoppe)Läffel (Zoppe)Louche (Zoppe)Kell(e) (Zoppe)Boll,NO,NA,NA,NA
 yes,49,raw_table_49,Wuertschatz,Läffelsgeschier,Läffelsgeschier,[Bildbeschreiwung],Variant_Läffelsgeschier,Läffelsgeschier Besteck Couverten Geschier Iessbesteck Iessgeschier,NO,NA,NA,NA
 yes,512,raw_table_512,Wuertschatz,Marcel [Gezei],Marcel [Gezei],[Bildbeschreiwung],Variant_Marcel,Marcel (Ënne-scht/er)hiem(-chen) Tank-Top T-Shirt (ouni Äerm) (Ënner-)Kleedchen Muerkstrikot Muskel-(T-)Shirt,NO,NA,NA,NA
 yes,182,raw_table_182,Wuertschatz,Moment,Moment,"Wenn du so um dich schlägst, dann ist mit einem Moment das schöne Wetter vorbei.",Variant_Moment,Moment Ament Abléck Ablack,NO,NA,NA,NA
@@ -740,7 +742,6 @@ yes,53,raw_table_53,Wuertschatz,Wallis,Wallis,[Bildbeschreiwung],Variant_Wallis,
 yes,314,raw_table_314,Wuertschatz,Wirschtercher,Wirschtercher,[Bildbeschreiwung],Variant_Wirschtercher,Wirschtercher Wuppen/Wippercher Wierschtercher Würschtercher Wirstercher Zoossissen Wurschten,NO,NA,NA,NA
 yes,70,raw_table_70,Wuertschatz,Y [Buschtaf],Y [Buschtaf],[Bildbeschreiwung],Variant_Y,[iː'gʀæk] Ypsilon,NO,NA,NA,NA
 yes,76,raw_table_76,Wuertschatz,Zanpasta,Zanpasta,[Bildbeschreiwung],Variant_Zanpasta,Zanpasta Zännseef Zan-/Zänncrème Zännpasta Zanp[aː]sta,NO,NA,NA,NA
-yes,322,raw_table_322,Wuertschatz,Zoppeläffel,Zoppeläffel,[Bildbeschreiwung],Variant_Zoppeläffel,(Zoppe)Läffel (Zoppe)Louche (Zoppe)Kell(e) (Zoppe)Boll,NO,NA,NA,NA
 yes,452,raw_table_452,Wuertschatz,Zär [Auer],Zär [Auer],[Bildbeschreiwung],Variant_Zär_[Auer],Zär Zeier Zeiger,NO,NA,NA,NA
 yes,369,raw_table_369,Wuertschatz,amplaz,amplaz,"Warum fangt ihr nicht an zu lernen, anstatt Grimassen vor dem Spiegel zu schneiden?",Variant_amplaz,amplaz amplatz anstatt statt aplaz,NO,NA,NA,NA
 yes,132,raw_table_132,Wuertschatz,buerféiss,buerféiss,"Als Henri barfuß herumgelaufen ist, hat er die Scherben am Boden gespürt.",Variant_buerféiss,buerféiss borféiss buerfouss barfouss  borfouss buerbes baarbes buerfes,NO,NA,NA,NA

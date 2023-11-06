@@ -1,5 +1,10 @@
 # News & Updates
 
+
+## November 2023
+*Nei Kaarten*
+- Emoji
+
 ## Oktober 2023
 *Nei Kaarten*
 - setzt
