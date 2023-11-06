@@ -115,14 +115,14 @@ ui <- function(request) {
                 nav_panel("Sproochlech Aflëss", plotOutput("plotAfloss"))
               ),
     
-              card(
-                card_header(tags$b("Random Forest - Variable Importance")),
-                card_body(
-                  # Plot Random Forest tree
-                  # deactivated because of performance issues
-                  #plotOutput("plotTree"),
-                  # Plot Variable Importance
-                  plotOutput("plotVariableImportance"))
+              navset_card_tab(
+                title = tags$b("Statistesch Analysen"),
+                
+                nav_panel("Variable Importance", plotOutput("plotVariableImportance")),
+                # Plot Random Forest tree
+                nav_panel("Random Forest tree", plotOutput("plotTree")),
+                # print text output of textLMLangEduIndex reactive 
+                nav_panel("Linear Modell", verbatimTextOutput("textLMLangEduIndex"))
               ),
     
               navset_card_tab(
@@ -590,16 +590,19 @@ server <- function(input, output, session) {
   }) 
   
   # TODO
-  # # reactive function for google data for mixed model
-  # data_regression <- reactive({
-  #   max_var <- most_frequent_variant()
-  #   str(max_var)
-  #   var <- variable()
-  #   print(var)
-  #   data <- google_df() %>% 
-  #     dplyr::mutate(temp_variable = if_else(var == max_var, 1, 0))
-  #   print(summary(data))
-  # })
+  # reactive function for google data for mixed model
+  data_regression <- reactive({
+    max_var <- most_frequent_variant()
+    str(max_var)
+    var <- variable()
+    print(var)
+    data <- google_df() %>%
+      # add a new variable temp2 which is 1 for the most frequent variant of the reactive 'variable()', 0 otherwise
+      mutate(temp_variable = ifelse(!!sym(var) == max_var, 1, 0)) 
+    #str(data)
+
+    data
+  })
   
   # plot function Sprooch & Educatiouns-Index
   output$plotLangEduIndex <- renderPlot({
@@ -613,6 +616,12 @@ server <- function(input, output, session) {
                              filter(Mammesprooch == "Jo"),
                              `Sprooch & Educatioun-Index`, variable = variable(), selection = selection(), caption = caption)
     
+  })
+  
+  # Textoutput for linear model
+  output$textLMLangEduIndex <- renderPrint({
+    index.lm <- lm(temp_variable ~ langEduIndex_raw + Alter + Geschlecht + Urbanisatioun, data = data_regression())
+    summary(index.lm)
   })
   
   # plot Ausbildung

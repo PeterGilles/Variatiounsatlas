@@ -21,8 +21,8 @@ library(gfonts)
 library(googlesheets4)
 library(fontawesome)
 library(randomForest)
-#library(party)
-
+library(party)
+library(lme4)
 ## Some settings
 # 1. load paths externally
 paths <- rio::import("paths.csv")
