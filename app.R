@@ -1,12 +1,3 @@
-### Deployment
-# options(rsconnect.packrat = TRUE)
-# rsconnect::deployApp(appDir = "~/Documents/_Daten/Schnessen-App/MappingDialects/shiny_dev/atlas", account = "petergill", server = "shinyapps.io", appName = "Variatiounsatlas",      appTitle = "Variatiounsatlas", launch.browser = function(url) {         message("Deployment completed: ", url)}, lint = FALSE, metadata = list(asMultiple = FALSE, asStatic = FALSE), logLevel = "verbose") 
-# ältere Version von rsconnect installieren
-# install_version("rsconnect", version = "0.8.29")
-
-# möglicher Ersatz für shinydashboard
-# https://stackoverflow.com/questions/76620898/using-bslibaccordion-as-a-replacement-for-shinydashboardsidebarmenu
-
 source("global.R")
 
 ## UI
