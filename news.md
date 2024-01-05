@@ -1,9 +1,39 @@
 # News & Updates
 
+## Dezember 2023
+*Nei Kaarten*
+
+- desaktivéieren
+- giel
+- gréng
+- blo
+- Emoji
+- huet ... kritt
+- Brëll
+- Atomkraaftwierk
+- Pësel
 
 ## November 2023
+
+*Nei Sektioun: Statistesch Analysen*
+
+Hei fënnt een e **Lineare Modell**, d'**Variable Importance** an eng **Random Forest-Analys**. Beim Lineare Modell gëtt déi heefegst Variant als Referenzvariant (=1) gesat an all aner Varianten zesummegefaasst (=0). Fir e linearen Effekt beim Alter nozeweisen, kuckt déi lineare Gläichung 'Alter.L'. Wa si signifikant ass, dann hëlt d'Referenzvariant mam Alter linear zou (bei positivem 'Estimate), respektiv of (bei negativem 'Estimate'). D'Interpretatioun ass also ëmmer op d'Entwécklung vun der Referenzvariant ze bezéien.
+
 *Nei Kaarten*
 - Emoji
+- Versteesdemech
+- Apparat [Plural]
+- Fluchhafen
+- Trafic
+- Fussballweltmeeschterschaft [Fouen-s]
+- a Frankräich [Prepositioun]
+- Zär [Gewächshaus]
+- mof
+- goufen...bestallt
+- Versteesdemech [Genus]
+- Fotell [Genus]
+- verluer
+- Steen
 
 ## Oktober 2023
 *Nei Kaarten*

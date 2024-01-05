@@ -18,8 +18,8 @@ ui <- function(request) {
     lang = "de",
     theme = bs_theme(version = 5,
                      bootswatch = "cerulean",
-                     base_font = font_google("Fira Sans"),
-                     heading_font = font_google("Fredoka One"),
+                     base_font = font_google("Lato"),
+                     heading_font = font_google("Montserrat"),
                      #"navbar_bg" = "#FBFF90",
                      #"nav-link-font-size" = "20px",
                      ),
@@ -75,6 +75,7 @@ ui <- function(request) {
 
     nav_panel("Intro", includeMarkdown("intro.md")),
     nav_panel("News", includeMarkdown("news.md")),
+    nav_panel("Detailer", includeMarkdown("detailer.md")),
     nav_panel("Kaarten",
               
               # Iwwersiicht iwwer Variabel
@@ -101,7 +102,7 @@ ui <- function(request) {
                 footer = tags$div(tags$em("D'Faarf korrespondéiert mat der heefegster Variant pro Polygon an d'Verbreedung vun där Variant gëtt besser visibel. D'Intensitéit vun der Faarf weist déi relativ Heefegkeet vun där Variant. Wat méi intensiv, wat d'Heefegkeet méi héich ass. Wann d'Faarf méi hell ass, dann ass déi Gemeng/dee Kanton duerch Mëschung vu verschiddene Variante charakteriséiert. D'Beweegung mat der Maus liwwert weider Infoe iwwert d'Varianteverdeelung. Fir wäiss Polygoner leie keng Date vir."))
     ),
               navset_card_tab(
-                title = tags$b("Sozialdaten"),
+                title = tags$b("Korrelatioun mat Sozialdaten"),
 
                 nav_panel("Alter", plotOutput("plotAlter")),
                 nav_panel("Geschlecht", plotOutput("plotGeschlecht")),
@@ -118,15 +119,20 @@ ui <- function(request) {
               navset_card_tab(
                 title = tags$b("Statistesch Analysen"),
                 
+                # print text + plot output of various social factors reactive 
+                nav_panel("Logistesch Regressioun", 
+                          # build the selectInput for the variable
+                          # choices should also contain the interaction terms
+                          selectInput("selectedVariable", "Select a variable:", choices = c("langEduIndex_raw", "`Kompetenz am Franséischen`", "Alter", "Geschlecht", "Dialektgebiet")),
+                          htmlOutput("textLModel"),
+                          plotOutput("plotLModel")),
                 nav_panel("Variable Importance", plotOutput("plotVariableImportance")),
                 # Plot Random Forest tree
-                nav_panel("Random Forest tree", plotOutput("plotTree")),
-                # print text output of textLMLangEduIndex reactive 
-                nav_panel("Linear Modell", verbatimTextOutput("textLMLangEduIndex"))
+                nav_panel("Random Forest tree", plotOutput("plotTree"))
               ),
     
               navset_card_tab(
-                title = tags$b("Sozio-demografesch facteure vun der Gemeng"),
+                title = tags$b("Korrelatioun mat sozio-demografesche Facteure vun der Gemeng"),
 
                 nav_panel("Urbanisatioun", plotOutput("plotUrbanisatioun")),
                 nav_panel("Awunner_km2", plotOutput("plotAwunner")),
@@ -220,8 +226,10 @@ server <- function(input, output, session) {
   # Define the reactive function to determine the most frequent variant
   most_frequent_variant <- reactive({
     # Get the counts of each variant
-    counts <- table(google_df() %>%
-                      dplyr::select(variable()))
+    input_data <- google_df() %>%
+      dplyr::select(variable()) %>%
+      dplyr::filter_at(vars(variable()), ~ . != "FALSE")
+    counts <- table(input_data)
     # Get the name of the variant with the highest count
     names(counts)[which.max(counts)]
   })
@@ -589,19 +597,18 @@ server <- function(input, output, session) {
     
   }) 
   
-  # TODO
   # reactive function for google data for mixed model
   data_regression <- reactive({
     max_var <- most_frequent_variant()
-    str(max_var)
+    title = paste("Heefegst Variant/Referenzvariant:", max_var)
     var <- variable()
-    print(var)
     data <- google_df() %>%
+      filter(!!sym(var) %in% selection()) %>%
       # add a new variable temp2 which is 1 for the most frequent variant of the reactive 'variable()', 0 otherwise
-      mutate(temp_variable = ifelse(!!sym(var) == max_var, 1, 0)) 
+      mutate(temp_variable = ifelse(!!sym(var) == max_var, 1, 0))
     #str(data)
 
-    data
+    return(list(data = data, title = title))
   })
   
   # plot function Sprooch & Educatiouns-Index
@@ -618,10 +625,39 @@ server <- function(input, output, session) {
     
   })
   
-  # Textoutput for linear model
-  output$textLMLangEduIndex <- renderPrint({
-    index.lm <- lm(temp_variable ~ langEduIndex_raw + Alter + Geschlecht + Urbanisatioun, data = data_regression())
-    summary(index.lm)
+  # run a logistic regression
+  lmodel <- reactive({
+    glm(as.formula(paste("temp_variable ~", input$selectedVariable)), family = "binomial", data = data_regression()$data)
+  })
+  
+  # Output the LM
+  output$textLModel <- renderUI({
+    HTML(sjPlot::tab_model(lmodel(), 
+                           p.style = "scientific_stars",
+                           title = data_regression()$title)$knitr)
+  })
+  
+  output$plotLModel <- renderPlot({
+    # Predict y-values
+    predicted <- predict(lmodel(), type = "response")
+    
+    # Find x-value where y is closest to 0.5
+    closest_point <- which.min(abs(predicted - 0.5))
+    x_value <- data_regression()$data[[input$selectedVariable]][closest_point]
+    
+    p <- ggplot(data_regression()$data, aes_string(x = input$selectedVariable, y = "temp_variable")) +
+      geom_jitter(height = 0.1, alpha = 0.5) +
+      geom_smooth(method = "glm", method.args = list(family = "binomial"), color = "red") +
+      geom_point(aes(x = x_value, y = 0.5), color = "blue", size = 3) +  # Add point
+      labs(x = input$selectedVariable, y = "Warscheinlechkeet, datt d'Variant gesot gëtt") +
+      theme_bw() +
+      ggtitle(data_regression()$title) +
+      labs(caption = "Baséiert op enger logistischer Regressioun mat der Referenzvariant als Referenzkategorie") +
+      annotate("text", x = 0.5, y = 0.5, label = paste("p =", round(summary(lmodel())$coefficients[2,4], 3))) +
+      annotate("text", x = 0.5, y = 0.1, label = paste("n =", nrow(data_regression()$data))) +
+      theme(legend.position = "none")
+    
+    p
   })
   
   # plot Ausbildung

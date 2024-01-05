@@ -23,6 +23,8 @@ library(fontawesome)
 library(randomForest)
 library(party)
 library(lme4)
+library(broom)
+ 
 ## Some settings
 # 1. load paths externally
 paths <- rio::import("paths.csv")
