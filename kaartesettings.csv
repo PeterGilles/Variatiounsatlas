@@ -142,7 +142,7 @@ yes,36,raw_table_36,Foneetik,brong,brong ⓁⓈⒶ,Der Baum im Garten verliert s
 yes,75,raw_table_75,Foneetik,brongelzeg,brongelzeg ⓁⓈⒶ,Wir sind mit dem bräunlichen Frosch zur Tierärztin gefahren.,Variant_brongelzeg,brong brongelzeg bronglech braun braunelzeg bräunlech/-lich,128,ⓁⓈⒶ,NA,NA
 yes,25,raw_table_25,Foneetik,bräichten,bräichten,Die Hälfte der Schilder bräuchten wir nicht.,Variant_bräichten,bräichten bréichten bri(i)chten bräiten,NO,NA,NA,NA
 yes,338,raw_table_338,Foneetik,bäigedroen,bäigedroen,"Diese Publikation hat dazu beigetragen, dass die Wahlprogramme angepasst worden sind.",Variant_bäigedroen,bäigedroen bäigedro,NO,NA,NA,NA
-yes,85,raw_table_85,Foneetik,béis,béis ⓁⓈⒶ,"Claudine Schroeder's Katze will euch nicht beißen, auch wenn sie böse schaut.",Variant_béis,béis bis,124,ⓁⓈⒶ,NA,NA
+yes,85,raw_table_85,Foneetik,béis,béis ⓁⓈⒶ,"Claudine Schroeder's Katze will euch nicht beißen, auch wenn sie böse schaut.",Variant_béis,béis b[iː]s,124,ⓁⓈⒶ,NA,NA
 yes,303,raw_table_303,Foneetik,de n en [n ephelcysticon],de n en [n ephelcysticon],"Ja, wenn du ihn findest, dann kannst du ihn behalten.",Variant_de_n_en1,du_en de_n_en de_hien de_en du_n_en,NO,NA,NA,NA
 yes,303,raw_table_303,Foneetik,de n en [n ephelcysticon],de n en [n ephelcysticon],"Ja, wenn du ihn findest, dann kannst du ihn behalten.",Variant_de_n_en2,du_en de_n_en de_hien de_en du_n_en,NO,NA,NA,NA
 yes,145,raw_table_145,Foneetik,deenen,deenen,Die Fans der zwei Clubs sind aneinander geraten.,Variant_deenen,deenen den/deen,NO,NA,NA,NA
@@ -453,11 +453,12 @@ yes,192,raw_table_192,Grammatik,déi [Relativpronomen > Frëndin],déi [Relativp
 yes,521,raw_table_521,Grammatik,déierst,déierst,Das rosa Hemd von Armani war das teuerste im ganzen Laden.,Variant_deierst,deierst deiersten deierstent,NO,NA,NA,NA
 yes,6,raw_table_6,Grammatik,e Freideg [Zäitangab],e Freideg [Zäitangab],Eine Frau hat am Freitag die schwarzen Kleider genäht.,Variant_en_Zäitangab,en een den um,NO,NA,NA,NA
 yes,73,raw_table_73,Grammatik,e Samschdeg [Zäitangab],e Samschdeg [Zäitangab],Samedi la bourgmestre a tenu un discours.,Variant_e_Samschdeg,en den um (näischt),NO,NA,NA,NA
+yes,338,raw_table_558,Grammatik,eenzelnen,eenzelnen,Auf jeden einzelnen muss Verlass sein.,Variant_eenzelnen,eenz(e)len eenzelnen,NO,NA,NA,NA
 yes,65,raw_table_65,Grammatik,en (Dënschdeg) [Zäitangab],en (Dënschdeg) [Zäitangab],Am Dienstag war Julie noch mal bei H&M und hat die rote Hose angezogen.,Variant_en_Dënschdeg,en_Dënschdeg den_Dënschdeg um_Dënschdeg Dënschdeg,NO,NA,NA,NA
 yes,40,raw_table_40,Grammatik,entfouert,entfouert,In der Nacht wurde einer der 12 Apostel entführt.,Variant_entfouert,entfouert entféiert,NO,NA,NA,NA
 yes,410,raw_table_410,Grammatik,et [> Kand],et [> Kand],Das arme Kind! Es hat sich seinen Fuß verstaucht.,Variant_et_Kand,et 't hatt,NO,NA,NA,NA
 yes,112,raw_table_112,Grammatik,gaangen,gaangen,Letzte Nacht bin ich schon das zweite Mal dorthin gegangen.,Variant_gaangen,gaangen gaang gangen gang,NO,NA,NA,NA
-yes,192,raw_table_192,Grammatik,ganz Zäit [Adjektivflexioun],ganz Zäit [Adjektivflexioun],J'ai une amie qui rit tout le temps.,Variant_ganz_Zäit,ganz_Zäit ganzen_Zäit ganzen_Zäiten ganz_Zäiten,NO,NA,NA,NA
+yes,192,raw_table_192,Grammatik,ganzen Zäit [Adjektivflexioun],ganzen Zäit [Adjektivflexioun],J'ai une amie qui rit tout le temps.,Variant_ganz_Zäit,ganz_Zäit ganzen_Zäit ganzen_Zäiten ganz_Zäiten,NO,NA,NA,NA
 yes,6,raw_table_6,Grammatik,gebitzt,gebitzt ⓁⓈⒶ,Eine Frau hat am Freitag die schwarzen Kleider genäht.,Variant_genäht,gebutt gebitzt gebout gebikst gebukt gebéizt,160,ⓁⓈⒶ,NA,NA
 yes,310,raw_table_310,Grammatik,gefaalt,gefaalt,"Nachdem ich meine Hemden gewaschen und gefaltet habe, kann ich Playstation spielen.",Variant_gefaalt,gefaalt gefal gefalen,NO,NA,NA,NA
 yes,313,raw_table_313,Grammatik,gefaart,gefaart,"Obwohl er geschlagen wurde, hat er sich nie vor seinen Feinden gefürchtet.",Variant_gefaart,gefaart gefäert gefiercht gefoart gefoort,NO,NA,NA,NA
@@ -624,8 +625,8 @@ yes,724,raw_table_724,Lautkontakt,sanitär,sanitär,Dës Pizzeria huet déi sani
 yes,206,raw_table_206,Lautkontakt,sensibler,sensibler,Wir sind in einer sensiblen Situation,Variant_sensibler,[sæ]nsibler [zæ]nsibler [sã:]sibler,NO,NA,NA,NA
 yes,709,raw_table_709,Lautkontakt,vulnerabel,vulnerabel,Zënter dem Ufank vun der Corona-Pandemie si vill vulnerabel Leit an Autoquarantän.,Variant_vulnerabel,v[u]lnerabel v[y]lnerabel,NO,NA,NA,NA
 yes,320,raw_table_320,Lautkontakt,zouverlässeg,zouverlässeg,Unter allen Sekretärinnen ist sie die zuverlässigste.,Variant_zouverléisseg,zouverléisseg zouverlässeg,NO,NA,NA,NA
-yes,424,raw_table_424,Lautkontakt,Ä[ʒ/g]ypten,Ä[ʒ/g]ypten,Ihr fliegt vor Pfingsten nach Ägypten.,Variant_Ägypten_g,Ä[g]ypten Ä[ʑ]ypten,NO,NA,NA,NA
-yes,424,raw_table_424,Lautkontakt,Äg[i/y]pten,Äg[i/y]pten,Ihr fliegt vor Pfingsten nach Ägypten.,Variant_Ägypten_y,Äg[i]pten Äg[y]pten,NO,NA,NA,NA
+yes,424,raw_table_424,Lautkontakt,Ä[ʒ]ypten,Ä[ʒ]ypten,Ihr fliegt vor Pfingsten nach Ägypten.,Variant_Ägypten_g,Ä[g]ypten Ä[ʑ]ypten,NO,NA,NA,NA
+yes,424,raw_table_424,Lautkontakt,Äg[i]pten,Äg[i]pten,Ihr fliegt vor Pfingsten nach Ägypten.,Variant_Ägypten_y,Äg[i]pten Äg[y]pten,NO,NA,NA,NA
 yes,168,raw_table_168,Nimmgrammatik,Alain Kerger [Artikel],Alain Kerger [Artikel],Alain Kerger lebt in Luxemburg im Müllerthal mit einer Französin zusammen.,Variant_Artikel_Alain_Kerger,den_Alain_Kerger Alain_Kerger,NO,NA,NA,NA
 yes,81,raw_table_81,Nimmgrammatik,Camille Weber,Camille Weber,Depuis 1960 Camille Weber s'informe sur des thèmes psychologiques.,Variant_Camille_Weber,Camille_Weber Webesch_Camille Webesch_Cam,NO,NA,NA,NA
 yes,12,raw_table_12,Nimmgrammatik,Claude Schmit,Claude Schmit,Claude Schmit hat das schönste Haus im Dorf,Variant_Claude_Schmit_Numm,Claude_Schmit Schmitte_Claude Schmitts_Claude Schmittse_Claude,NO,NA,NA,NA
@@ -726,7 +727,7 @@ yes,22,raw_table_22,Wuertschatz,Pharen,Pharen,[Bildbeschreiwung],Variant_Pharen,
 yes,28,raw_table_28,Wuertschatz,Plage,Plage,[Bildbeschreiwung],Variant_Plage,Plage Strand Plage/Strand,NO,NA,NA,NA
 yes,83,raw_table_83,Wuertschatz,Police,Police,Ich habe von der Polizei drei Strafzettel bekommen.,Variant_Police,Police Polizei Flicken,NO,NA,NA,NA
 yes,86,raw_table_86,Wuertschatz,Printer,Printer,[Bildbeschreiwung],Variant_Drucker,Drucker Imprimante Drocker Drécker Printer,NO,NA,NA,NA
-yes,96,raw_table_96,Wuertschatz,Prisong,Prisong,[Fro],Variant_Prisong,Pris[ɔ̃ː] Prisong Gefängnes Gefängnis Bing,NO,NA,NA,NA
+yes,96,raw_table_96,Wuertschatz,Prison,Prison,[Fro],Variant_Prisong,Pris[ɔ̃ː] Prisong Gefängnes Gefängnis Bing,NO,NA,NA,NA
 yes,68,raw_table_68,Wuertschatz,Puppelchen,Puppelchen,[Bildbeschreiwung],Variant_Bëbee,Bëbee Beebee B[a:]by Beebi Puppelchen,NO,NA,NA,NA
 yes,514,raw_table_514,Wuertschatz,Päerdsbier(s)gebeess,Päerdsbier(s)gebeess,[Bildbeschreiwung],Variant_Päerdsbier(s)gebeess,Päerdsbier(s)gebeess Brommbier(s)gebeess Schwaarzbier(s)gebeess Molbier(s)gebeess Hammbier(s)gebeess Blobier(s)gebeess,NO,NA,NA,NA
 yes,2,raw_table_2,Wuertschatz,Päiperlek,Päiperlek,[Bildbeschreiwung],Variant_Päiperlek,Päiperlek Pimpampel Schmetterling Miller-däppchen/moler Pippel,NO,NA,lex mhd_ī,NA
@@ -786,7 +787,7 @@ yes,544,raw_table_544,Wuertschatz,mof,mof,[Bildbeschreiwung],Variant_mof,mof vio
 yes,44,raw_table_44,Wuertschatz,nëmmen,nëmmen,Ich trinke morgens immer nur ein Glas Wein beim Essen.,Variant_nëmmen,nëmmen [Ʒ]üst sust,NO,NA,NA,NA
 yes,313,raw_table_313,Wuertschatz,obwuel,obwuel,"Obwohl er geschlagen wurde, hat er sich nie vor seinen Feinden gefürchtet.",Variant_obwuel,obwuel obschonn obwohl obschonns,NO,NA,NA,NA
 yes,29,raw_table_29,Wuertschatz,oft,oft,"Ta soeur est géniale, elle raconte souvent les meilleures blagues!",Variant_dacks,dacks oft,NO,NA,NA,NA
-yes,161,raw_table_161,Wuertschatz,selten,selten,Bei einer Safari kam Noémie den seltenen Tieren am nächsten.,Variant_selten,selten rar seelen sielen,NO,NA,NA,NA
+yes,161,raw_table_161,Wuertschatz,seelen,seelen,Bei einer Safari kam Noémie den seltenen Tieren am nächsten.,Variant_selten,selten rar seelen sielen,NO,NA,NA,NA
 yes,81,raw_table_81,Wuertschatz,säit,säit,Depuis 1960 Camille Weber s'informe sur des thèmes psychologiques.,Variant_säit1,säit zënter zanter seit vun...un,NO,NA,NA,NA
 yes,139,raw_table_139,Wuertschatz,säit,säit,Seit gestern steht der sogenannte Mörder von Belval vor Gericht.,Variant_säit2,säit zënter zanter seit vun...un,NO,NA,NA,NA
 yes,48,raw_table_48,Wuertschatz,séier,séier,Ta meilleure amie a couru sa première course; elle était la plus rapide.,Variant_séier_Wuertschatz,séier schnell,NO,NA,NA,NA

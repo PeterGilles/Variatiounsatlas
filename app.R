@@ -85,7 +85,8 @@ ui <- function(request) {
               navset_card_tab(
                 title = tags$b("Kartografie"),
                 #full_screen = TRUE,
-                nav_panel("Iwwerbléckskaart", withSpinner(girafeOutput("Iwwerbléckskaart"))),
+                nav_panel("Iwwerbléckskaart",
+                          withSpinner(girafeOutput("Iwwerbléckskaart"))),
                 nav_panel("Kaarten nom Alter", withSpinner(plotOutput("Iwwerbléckskaart_no_alter"))),
                 #tabPanel("Altersanimatioun", withSpinner(plotOutput("Iwwerbléckskaart_dynamic", height = "700px")))
                 nav_panel("Variantekaarten", withSpinner(uiOutput("plot.ui")),
@@ -98,11 +99,12 @@ ui <- function(request) {
                 nav_panel("Alter", plotOutput("plotAlter")),
                 nav_panel("Geschlecht", plotOutput("plotGeschlecht")),
                 nav_panel("Dialektgebiet", plotOutput("plotDialektgebiet")),
-                nav_panel("Sprooch- & Educatiounsindex", plotOutput("plotLangEduIndex")),
+                # deaktivéiert, 23.1.2023
+                #nav_panel("Sprooch- & Educatiounsindex", plotOutput("plotLangEduIndex")),
                 nav_panel("Ausbildung", plotOutput("plotAusbildung")),
                 nav_panel("Kompetenz Däitsch", plotOutput("plotKompetenzD")),
                 nav_panel("Kompetenz Franséisch", plotOutput("plotKompetenzF")),
-                #tabPanel("Sproochekompetenz", plotOutput("plotSproochekompetenz")),
+                nav_panel("Sproochekompetenz", plotOutput("plotSproochekompetenz")),
                 nav_panel("Mammesprooch", plotOutput("plotMammesprooch")),
                 nav_panel("Sproochlech Aflëss", plotOutput("plotAfloss"))
               ),
@@ -112,11 +114,8 @@ ui <- function(request) {
                 
                 # print text + plot output of various social factors reactive 
                 nav_panel("Logistesch Regressioun", 
-                          # build the selectInput for the variable
-                          # choices should also contain the interaction terms
-                          selectInput("selectedVariable", "Select a variable:", choices = c("langEduIndex_raw", "`Kompetenz am Franséischen`", "Alter", "Geschlecht", "Dialektgebiet")),
-                          htmlOutput("textLModel"),
-                          plotOutput("plotLModel")),
+                          plotOutput("plotLModel"),
+                          htmlOutput("textLModel")),
                 nav_panel("Variable Importance", plotOutput("plotVariableImportance")),
                 # Plot Random Forest tree
                 nav_panel("Random Forest tree", plotOutput("plotTree"))
@@ -233,6 +232,7 @@ server <- function(input, output, session) {
     
     # Determine the base polygon (canton or commune) based on the number of participants per item
     geo_type <- if (nrow(longer_google_df) <= 2200) "Kanton" else "Gemeng"
+    #geo_type <- input$selected_geo_type
     
     # Pivot the table and add a 'geo_type' column
     longer_google_df <- longer_google_df %>%
@@ -596,7 +596,13 @@ server <- function(input, output, session) {
     data <- google_df() %>%
       filter(!!sym(var) %in% selection()) %>%
       # add a new variable temp2 which is 1 for the most frequent variant of the reactive 'variable()', 0 otherwise
-      mutate(temp_variable = ifelse(!!sym(var) == max_var, 1, 0))
+      mutate(temp_variable = ifelse(!!sym(var) == max_var, 1, 0)) %>%
+      # add a new variable kompetenz_däitsch, based on `Kompetenz am Däitschen` rescaled from 0 to 1 using scales::rescale()
+      mutate(`Kompetenz am Däitschen` = scales::rescale(as.numeric(`Kompetenz am Däitschen`), to = c(0, 1))) %>%
+      mutate(`Kompetenz am Franséischen` = scales::rescale(as.numeric(`Kompetenz am Franséischen`), to = c(0, 1))) %>%
+      # relevel factor Dialektgebiet to "Zentrum" (reference level)
+      mutate(Dialektgebiet = relevel(Dialektgebiet, ref = "Zentrum"))
+    
     #str(data)
 
     return(list(data = data, title = title))
@@ -606,7 +612,7 @@ server <- function(input, output, session) {
   output$plotLangEduIndex <- renderPlot({
     
     caption = paste("Dësen Index kombinéiert dat sproochlecht mat dem Ausbildungskapital:\n
-                    Kompetenz am Däitschen (20 %), Kompetenz am Franséischen (40 %), Ausbildung (40 %).\n
+                    Kompetenz am Däitschen (25%), Kompetenz am Franséischen (40%), Ausbildung (35%).\n
                     Den Index rangéiert tëschent 0 an 1 (= maximaalt Kapital, i.e. béid Sproochkompetenzen maximal, Ausbildung: Universitéit/Fachhéichschoul)")
     
     plot_social_categories(data = google_df() %>%
@@ -618,38 +624,127 @@ server <- function(input, output, session) {
   
   # run a logistic regression
   lmodel <- reactive({
-    glm(as.formula(paste("temp_variable ~", input$selectedVariable)), family = "binomial", data = data_regression()$data)
+    #glm(as.formula(paste("temp_variable ~", input$selectedVariable)), family = "binomial", data = data_regression()$data)
+    glm(as.formula(paste("temp_variable ~ `Kompetenz am Däitschen` + `Kompetenz am Franséischen` + Alter + Geschlecht")),
+        family = "binomial",
+        data = data_regression()$data)
+    # für multinomial regression
+    # nnet::multinom(as.formula(paste(variable(), " ~ langEduIndex_raw + Alter + Geschlecht + Dialektgebiet")), 
+    #                data = data_regression()$data)
+    # data <-  data_regression()$data
+    # model <- glmulti::glmulti(temp_variable ~ `Kompetenz am Däitschen` + `Kompetenz am Franséischen` + Alter + Geschlecht + Dialektgebiet, 
+    #                  data =  data, 
+    #                  level = 1, 
+    #                  method = "d", 
+    #                  crit = "aicc",
+    #                  family = "binomial",
+    #                  fitfunction = glm,
+    #                  confsetsize = 0.95, 
+    #                  plotty = FALSE)
+    # 
+    # model@objects[[1]]
+    # print(summary(model@objects[[1]]))
+  })
+  
+  coeffs <- reactive({
+    tidy(lmodel()) %>%
+      dplyr::filter(!grepl("Alter.Q|Alter.C|Alter\\^4|Alter\\^5|Ausbildung.Q|Ausbildung.C|Ausbildung\\^4|Ausbildung\\^5", term)) %>%
+      dplyr::select(parameter = term, est = estimate, se = std.error, z = statistic, p = p.value) %>%
+      # für multinomial regression
+      #dplyr::select(parameter = term, est = estimate, se = std.error, z = statistic, p = p.value, Response = y.level) %>%
+      # Create pretty.parameter and signif_labels columns
+      mutate(parameter = fct_reorder(parameter, est)) %>%
+      mutate(signif_labels = ifelse(p < 0.001, "***", ifelse(p < 0.01, "**", ifelse(p < 0.05, "*", ""))))
+      
   })
   
   # Output the LM
   output$textLModel <- renderUI({
     HTML(sjPlot::tab_model(lmodel(), 
+                           rm.terms = c("Alter.C", "Alter.Q", "Alter^4", "Alter^5", "Ausbildung.C", "Ausbildung.Q", "Ausbildung^4", "Ausbildung^5"),
                            p.style = "scientific_stars",
-                           title = data_regression()$title)$knitr)
+                           title = data_regression()$title,
+                           dv.labels = most_frequent_variant()
+                           )$knitr)
   })
   
   output$plotLModel <- renderPlot({
-    # Predict y-values
-    predicted <- predict(lmodel(), type = "response")
     
-    # Find x-value where y is closest to 0.5
-    closest_point <- which.min(abs(predicted - 0.5))
-    x_value <- data_regression()$data[[input$selectedVariable]][closest_point]
+    # see: https://keikcaw.github.io/visualizing-logistic-regression/Intro.html#Introduction:_Just_tell_me_%E2%80%9Cthe%E2%80%9D_effect
+
+    # Define a named vector for colors
+    color_mapping <- c("Positiv" = "#0571B0", 
+                       "Net signifikant" = "gray", 
+                       "Negativ" = "#CA0020")
     
-    p <- ggplot(data_regression()$data, aes_string(x = input$selectedVariable, y = "temp_variable")) +
-      geom_jitter(height = 0.1, alpha = 0.5) +
-      geom_smooth(method = "glm", method.args = list(family = "binomial"), color = "red") +
-      geom_point(aes(x = x_value, y = 0.5), color = "blue", size = 3) +  # Add point
-      labs(x = input$selectedVariable, y = "Warscheinlechkeet, datt d'Variant gesot gëtt") +
-      theme_bw() +
-      ggtitle(data_regression()$title) +
-      labs(caption = "Baséiert op enger logistischer Regressioun mat der Referenzvariant als Referenzkategorie") +
-      annotate("text", x = 0.5, y = 0.5, label = paste("p =", round(summary(lmodel())$coefficients[2,4], 3))) +
-      annotate("text", x = 0.5, y = 0.1, label = paste("n =", nrow(data_regression()$data))) +
-      theme(legend.position = "none")
+    # Specify Roboto as the font family
+    theme_set(theme_minimal() +
+                theme(
+                  axis.title.x = element_text(size = 14, family = "Lato"), # X-axis title font
+                  axis.title.y = element_text(size = 14, family = "Lato"), # Y-axis title font
+                  axis.text.x = element_text(size = 14, family = "Lato"),  # X-axis labels font
+                  axis.text.y = element_text(size = 14, family = "Lato"),  # Y-axis labels font
+                  plot.title = element_text(size = 14, family = "Lato")    # Plot title font
+                ))
     
-    p
+    coeffs() %>%
+      filter(parameter != "(Intercept)") %>%
+      mutate(
+        pretty.parameter = fct_reorder(parameter, est),
+        lower.95 = est + (qnorm(0.025) * se),
+        lower.50 = est + (qnorm(0.25) * se),
+        upper.50 = est + (qnorm(0.75) * se),
+        upper.95 = est + (qnorm(0.975) * se),
+        signif = case_when(p > 0.05 ~ "Net signifikant",
+                           est > 0 ~ "Positiv",
+                           est < 0 ~ "Negativ"),
+        signif = fct_relevel(signif, "Positiv",
+                             "Net signifikant",
+                             "Negativ")) %>%
+      ggplot(aes(x = pretty.parameter, color = signif)) +
+      geom_linerange(aes(ymin = lower.95, ymax = upper.95), size = 1) +
+      geom_linerange(aes(ymin = lower.50, ymax = upper.50), size = 2) +
+      geom_point(aes(y = est), size = 4) +
+      geom_hline(yintercept = 0) +
+      scale_y_continuous(
+        breaks = c(-1, 0, 1), #<<
+        labels = c("← Manner", #<<
+                   "Gläich", #<<
+                   "Méi →") #<<
+      ) +
+      scale_color_manual(
+        "",
+        values = color_mapping
+      ) +
+      geom_text(aes(x = pretty.parameter, y = upper.95, label = signif_labels), vjust = -0.5, size = 6) +
+      labs(x = "", y = "Warscheinlechkeet vum Gebrauch\nvun der Variant",
+           title = paste0(data_regression()$title, "\n\nGeschate Relatioun tëscht soziale Facteuren an der\nWarscheinlechkeet fir de Gebrauch vun der Variant")) +
+      coord_flip(clip = "off")
+    
   })
+  
+  # output$plotLModel <- renderPlot({
+  #   # Predict y-values
+  #   predicted <- predict(lmodel(), type = "response")
+  #   
+  #   # Find x-value where y is closest to 0.5
+  #   closest_point <- which.min(abs(predicted - 0.5))
+  #   x_value <- data_regression()$data[[input$selectedVariable]][closest_point]
+  #   
+  #   p <- ggplot(data_regression()$data, aes_string(x = input$selectedVariable, y = "temp_variable")) +
+  #     geom_jitter(height = 0.1, alpha = 0.5) +
+  #     geom_smooth(method = "glm", method.args = list(family = "binomial"), color = "red") +
+  #     geom_point(aes(x = x_value, y = 0.5), color = "blue", size = 3) +  # Add point
+  #     labs(x = input$selectedVariable, y = "Warscheinlechkeet, datt d'Variant gesot gëtt") +
+  #     theme_bw() +
+  #     #ggtitle(data_regression()$title) +
+  #     labs(caption = "Baséiert op enger logistischer Regressioun mat der Referenzvariant als Referenzkategorie") +
+  #     annotate("text", x = 0.5, y = 0.5, label = paste("p =", round(summary(lmodel())$coefficients[2,4], 3))) +
+  #     annotate("text", x = 0.5, y = 0.1, label = paste("n =", nrow(data_regression()$data))) +
+  #     theme(legend.position = "none")
+  #   
+  #   p
+  # })
   
   # plot Ausbildung
   output$plotAusbildung <- renderPlot({

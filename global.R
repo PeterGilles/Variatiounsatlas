@@ -24,6 +24,10 @@ library(randomForest)
 library(party)
 library(lme4)
 library(broom)
+
+# on Ubuntu/engelmann, install packages with:
+# sudo su - -c "R -e \"install.packages('party', repos='http://cran.rstudio.com/')\""
+
  
 ## Some settings
 # 1. load paths externally
@@ -37,20 +41,29 @@ SERVER <- filter(paths, name == "SERVER") %>%
   as.character()
 
 ## Font stuff
+#get_all_fonts()
+
 # setup_font(
-#   id = "open-sans", 
-#   output_dir = "fonts", 
-#   variants = c("regular", "italic", "700", "700italic"), 
+#   id = "open-sans",
+#   output_dir = "fonts",
+#   variants = c("regular", "italic", "700", "700italic"),
 #   prefer_local_source = FALSE)
-# 
+#
 # use_font("open-sans", "fonts/css/open-sans.css", selector = ".dummy-selector")
 
 # setup_font(
-#   id = "roboto", 
-#   output_dir = "fonts", 
-#   variants = c("regular", "italic", "700", "700italic"), 
+#   id = "roboto",
+#   output_dir = "fonts",
+#   variants = c("regular", "italic", "700", "700italic"),
 #   prefer_local_source = FALSE)
 
+# setup_font(
+#   id = "domine",
+#   output_dir = "./Variatiounsatlas/fonts",
+#   variants = c("regular", "italic", "700", "700italic"),
+#   prefer_local_source = FALSE)
+
+#use_font("domine", "fonts/css/domine.css")
 #use_font("roboto", "fonts/css/roboto.css")
 #validated_fonts(list(sans = "roboto", serif = "roboto"))
 
@@ -175,6 +188,7 @@ plot_freq_variants <- function(data, variable, selection, caption = "") {
 
 make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map_title, item_number ="", item_text = "", geo_type) {
   
+  print(geo_type)
   color <- color_palette[1:color_num]
   
   # get count of all observations
@@ -458,7 +472,7 @@ plot_decision_tree <- function(data, variable, selection) {
 
   cond_df <- data %>%
     dplyr::filter(Mammesprooch != "Neen") %>%
-    dplyr::select(variable = {{variable}}, Alter, Geschlecht, Dialektgebiet, Index = `Sprooch & Educatioun-Index`) %>%
+    dplyr::select(variable = {{variable}}, Alter, Geschlecht, Dialektgebiet, Däitsch = `Kompetenz am Däitschen`, Franséisch = `Kompetenz am Franséischen`, Ausbildung) %>%
     dplyr::filter((variable) %in% selection) %>%
     na.omit() %>%
     # filter variants above a certain frequency level
@@ -478,14 +492,14 @@ plot_decision_tree <- function(data, variable, selection) {
   cond_df$Alter <- factor(cond_df$Alter,
                             ordered = is.ordered(ageorder))
   
-  # mutate Index in forest_df as ordered factor
-  indexorder <- c("<= 0.4", "0.6", "0.8", "1")
-  cond_df$Index <- factor(cond_df$Index,
-                            ordered = is.ordered(indexorder))
+  # # mutate Index in forest_df as ordered factor
+  # indexorder <- c("<= 0.4", "0.6", "0.8", "1")
+  # cond_df$Index <- factor(cond_df$Index,
+  #                           ordered = is.ordered(indexorder))
   
   set.seed(1234)
   
-  cond_tree <- ctree(formula = variable ~ Alter + Geschlecht + Dialektgebiet + Index + Alter:Geschlecht + Alter:Dialektgebiet + Alter:Index + Geschlecht:Dialektgebiet + Geschlecht:Index + Dialektgebiet:Index,
+  cond_tree <- ctree(formula = variable ~ Alter + Geschlecht + Dialektgebiet + Däitsch + Franséisch + Ausbildung,
                      data = cond_df,
                      control = ctree_control(testtype = "Univariate", minbucket = 20))
   
@@ -499,7 +513,7 @@ plot_VariableImportance <- function(data, variable, selection) {
 
   forest_df <-  data %>%
     filter(Mammesprooch != "Neen") %>%
-    dplyr::select(variable = {{variable}}, Alter, Geschlecht, Dialektgebiet, Index = `Sprooch & Educatioun-Index`) %>%
+    dplyr::select(variable = {{variable}}, Alter, Geschlecht, Dialektgebiet, Däitsch = `Kompetenz am Däitschen`, Franséisch = `Kompetenz am Franséischen`, Ausbildung) %>%
     dplyr::filter((variable) %in% selection) %>%
     na.omit() %>%
     # filter variants above a certain frequency level
@@ -514,13 +528,13 @@ plot_VariableImportance <- function(data, variable, selection) {
   forest_df$Alter <- factor(forest_df$Alter,
                             ordered = is.ordered(ageorder))
   
-  # mutate Index in forest_df as ordered factor
-  indexorder <- c("<= 0.4", "0.6", "0.8", "1")
-  forest_df$Index <- factor(forest_df$Index,
-                            ordered = is.ordered(indexorder))
+  # # mutate Index in forest_df as ordered factor
+  # indexorder <- c("<= 0.4", "0.6", "0.8", "1")
+  # forest_df$Index <- factor(forest_df$Index,
+  #                           ordered = is.ordered(indexorder))
   
   # Random forest model
-  rf <- randomForest(variable ~ Alter + Geschlecht + Dialektgebiet + Index + Alter:Geschlecht + Alter:Dialektgebiet + Alter:Index + Geschlecht:Dialektgebiet + Geschlecht:Index + Dialektgebiet:Index, 
+  rf <- randomForest(variable ~ Alter + Geschlecht + Dialektgebiet + Däitsch + Franséisch + Ausbildung, 
                      data=forest_df, importance=TRUE, ntree=2000, keep.forest=FALSE)
   
   # plot Variable Importance

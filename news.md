@@ -1,5 +1,14 @@
 # News & Updates
 
+## Januar 2024
+
+*Nei Kaarten*
+
+- eenzelnen
+
+
+Statistesch Analysen: D'logistesch Regressioun ass iwwerschafft an et gi lo d'Resultater fir eng kombinéiert Analys vu langEduIndex_raw, Alter, Geschlecht an Dialektgebitt gewisen. Eng nei Visualiséierung erlaabt e séieren Iwwerbléck iwwer signifikant Facteuren.
+
 ## Dezember 2023
 *Nei Kaarten*
 
