@@ -1,0 +1,417 @@
+{
+    "languages": ["lb", "en"],
+    "translation": [
+      {
+          "lb": "News",
+          "en": "News"
+        },
+        {
+          "lb": "Detailer",
+          "en": "Details"
+        },
+        {
+          "lb": "Impressum",
+          "en": "Imprint"
+        },
+        {
+          "lb": "Wëllkomm",
+          "en": "Welcome"
+        },
+        {
+          "lb": "Variatiounsatlas vum Lëtzebuergeschen",
+          "en": "Atlas of Linguistic Variation in Luxembourgish"
+        },
+        {
+          "lb": "Dësen Atlas dokumentéiert an anlyséiert d'Variatioun vum Lëtzebuergesche fir iwwer 700 ausgewielte linguistesch Variabelen an hir sëlleg Varianten, déi aus de sproochlechen Domäner 'Foneetik', 'Lautkontakt', 'Wuertschatz & Sproochkontakt', 'Grammatik', 'Pragmatik' an 'Nimmgrammatik' kommen. D'Date si mat Hëllef vun eiser Schnëssen-App an der Zäit tëschent 2018 an 2020 erhuewe ginn. Pro Variabel sinn d'Opname vu bis zu 2000 Leit an am Ganze méi wéi 250.000 Observatioune verschafft ginn. Dës breet Datebasis erlaabt en eenzegaartegen an zouverlässegen Iwwerbléck iwwert déi haiteg Variatioun am Lëtzebuergeschen, souwuel aus regionaler wéi och aus sozialer Perspektiv. Doriwwer eraus kann een un de Kaarten a Visualiséierungen ofliesen, wéi staark d'Lëtzebuergescht am Moment amgaang ass sech ze veränneren.",
+          "en": "This atlas documents and analyses the variation of Luxembourgish for over 700 selected linguistic variables and its numerous varieties, which stem from linguistic domains such as 'phonetic', 'sound contact', 'vocabulary & language contact', 'grammar', 'pragmatics' and 'Nimmgrammatik'. The data was collected using our Schnëssen app between 2018 and 2020. Each variable includes the recordings of up to 2000 people and a total of over 250,000 observations were annotated. This extensive database provides us with a unique and reliable overview of the current disparities in Luxembourgish, both from a regional and social perspective. In addition, the maps and illustrations showcase the extent to which the Luxembourgish language is undergoing change."
+        },
+        {
+          "lb": "Kaarten",
+          "en": "Maps"
+        },
+        {
+          "lb": "Vergläichskaart aus dem “Luxemburgischer Sprachatlas”, LSA (1963), Kaart 025",
+          "en": "Comparison map from the “Luxembourgish Language Atlas”, LSA (1963), Map 025"
+        },
+        {
+          "lb": "D'Faarf korrespondéiert mat der heefegster Variant pro Polygon. D'Intensitéit weist d'Heefegkeet vun där Variant.1157 Participanten | Klengst Polygoner: Gemeng. ©Uni Lëtzbuerg | Generéiert Mon Feb 27 11:18:47 2023",
+          "en": "The color corresponds to the most frequent variant per polygon. The intensity shows the frequency of that variant. 1157 Participants | Smallest Polygons: Municipality. ©Uni Lëtzbuerg | Generated Mon Feb 27 11:18:47 2023"
+        },
+        {
+          "lb": "Funktionalitéiten",
+          "en": "Features"
+        },
+        {
+          "lb": "All Resultater sinn iwwert dem Menüpunkt 'Kaarten' accessibel. Déi dialektologesch Situatioun am Land gëtt mat verschiddene Kaarten illustréiert. Eng 'Iwwerbléckskaart' weist déi heefegst Variant pro Kanton oder Gemeng. Wa méiglech gëtt och eng al Kaart aus dem 'Luxemburgischer Sprachatlas' vun 1963 als Verglach gewisen, fir d'Verännerung vun der Dialektlandschaft par rapport zu haut ze visualiséieren. D''Kaarten nom Alter' ginn den Iwwerbléck vun der regionaler Verbreedung fir eeler, mëttel-al a jonk Spriecher.innen. Donieft ginn d''Variantekaarten' méi an den Detail an illustréieren déi genee Verbreedung vun enger Variant pro Gemeng.",
+          "en": "All findings are accessible via the menu item 'Maps'. The dialectological situation in the country is depicted using various maps. An 'overview map' displays the most common variants per canton or municipality. To illustrate the changes in the dialect landscape compared to today, an old map from the 'Luxembourgish Language Atlas' from 1963 is also featured. The 'Maps by age' provide an overview of the regional distribution for older, middle-aged and young speakers. The 'variant maps' delve into greater detail by showing the exact distribution of a variant per municipality."
+        },
+        {
+          "lb": "Korrelation mat Sozialdaten",
+          "en": "Correlation with social data"
+        },
+        {
+          "lb": "Fir déi sozial Dynamik vun der Variatioun ze analyséieren, gëtt d'Verdeelung vun de Variante par rapport zu de soziale Kategorien 'Alter', 'Geschlecht', 'Dialektgebitt', 'Ausbildung', 'Sproochkompetenz am Däitschen', 'Sproochkompetenz am Franséischen', 'Mammesprooch', 'Sproochlech Aflëss', a 'Sprooch- & Educatiounsindex' visualiséiert.", 
+          "en": "In order to analyse the social dynamics of the variation, a distribution of the variants according to social categories such as 'age', 'gender', 'dialect area', 'education', 'German language proficiency', 'French language proficiency', 'mother tongue', 'language influences' and 'language and education index' is taken into account."
+        },
+        {
+          "lb": "Statistesch Analysen",
+          "en": "Statistical analyses"
+        },
+        {
+          "lb": "Ënner 'Statistesch Analysen' si verschidde statistesch Analysen ze fannen, déi d'Korrelatioun mat soziale Facteure méi am Detail ënnersiche, ënner anerem mat enger logistescher Regressiounsanalys an enger Random Forest-Analys.",
+          "en": "Under 'Statistical analyses' you will find a range of different statistical analyses that closely examine the correlation with social factors using, amongst other things, a logistic regression analysis and a Random Forest analysis."
+        },
+        {
+          "lb": "Korrelatioun mat sozio-demografesche Facteure vun der Gemeng",
+          "en": "Correlation with socio-demographic factors of the municipality"
+        },
+        {
+          "lb": "D'Sektioun 'Korrelatioun mat sozio-demografesche Facteure vun der Gemeng' offréiert eng weider Perspektiv op d'Variatioun, andeems den Zesummenhank vum perséinleche Variantegebrauch mat de sozio-demografesche Facteure vun der Gemeng wéi z.B. dem 'Degree of Urbanisation' (DEGRUBA), der Zuel vun den Awunner pro km2, dem 'Indice socio-économique' vum STATEC oder dem Grad vun der Immigratioun analyséiert gëtt.",
+          "en": "The section 'Correlation with socio-demographic factors of the municipality' offers a further perspective about the variation by analysing the relationship between personal use of the variants with the socio-demographic factors of the municipality, such as the 'Degree of Urbanisation' (DEGRUBA), the number of inhabitants per km2, the 'Socio-economic Index' of STATEC or the degree of immigration."
+        },
+        {
+          "lb": "Audio",
+          "en": "Audio"
+        },
+        {
+          "lb": "Iwwer 'Audio' kann een all eenzel Audioopnam och lauschteren.",
+          "en": "Via 'Audio', you can listen to each individual audio recording."
+        },
+        {
+          "lb": "Kaartekatalog",
+          "en": "Catalogue of maps"
+        },
+        {
+          "lb": "De 'Kaartekatalog' lëscht all Kaarten op, déi an dësem Atlas ze fannen sinn. Hei kann och nach verschiddene Kategorie gesicht ginn, z.B. no eenzelne Varianten, Kontexter, etc.",
+          "en": "The 'Catalogue of maps' lists every map that can be found in this atlas. There is also the option to look up different categories, e.g. individual variants, contexts, etc."
+        },
+        {
+          "lb": "Bibliografie",
+          "en": "Bibliography"
+        },
+        {
+          "lb": "De Variatiounsatlas zitéieren",
+          "en": "How to cite"
+        },
+        {
+           "lb": "Januar 2024",
+           "en": "January 2024"
+        },
+        {
+           "lb": "Nei Kaarten",
+           "en": "New Maps"
+        },
+        {
+           "lb": "Statistesch Analysen: D'logistesch Regressioun ass iwwerschafft an et gi lo d'Resultater fir eng kombinéiert Analys vu langEduIndex_raw, Alter, Geschlecht an Dialektgebitt gewisen. Eng nei Visualiséierung erlaabt e séieren Iwwerbléck iwwer signifikant Facteuren.",
+           "en": "Statistical analyses: The logistic regression has been revised and the results of a combined analysis of langEduIndex_raw, age, gender and dialect area are now displayed. A new visualisation provides a quick overview of key factors."
+        },
+        {
+           "lb": "Dezember 2023",
+           "en": "December 2023"
+        },
+        {
+           "lb": "November 2023",
+           "en": "November 2023"
+        },
+        {
+           "lb": "Nei Sektioun: Statistesch Analysen",
+           "en": "New Section: Statistical analyses"
+        },
+        {
+           "lb": "Hei fënnt een e Lineare Modell, d'Variable Importance an eng Random Forest-Analys. Beim Lineare Modell gëtt déi heefegst Variant als Referenzvariant (=1) gesat an all aner Varianten zesummegefaasst (=0). Fir e linearen Effekt beim Alter nozeweisen, kuckt déi lineare Gläichung 'Alter.L'. Wa si signifikant ass, dann hëlt d'Referenzvariant mam Alter linear zou (bei positivem 'Estimate), respektiv of (bei negativem 'Estimate'). D'Interpretatioun ass also ëmmer op d'Entwécklung vun der Referenzvariant ze bezéien.",
+           "en": "Here you will find a linear model, a variable significance and a random forest analysis. In the linear model, the most frequent variant is defined as the reference variant (=1) and all other variants are summarised (=0). To demonstrate a linear effect of age, the linear equation “Age.L” is analysed. If it is significant, then the reference variant increases linearly with age (in the case of a positive “estimate”) or it decreases (in the case of a negative “estimate”). The interpretation therefore always refers to the development of the reference variant."
+        },
+        {
+           "lb": "Oktober 2023",
+           "en": "October 2023"
+        },
+        {
+           "lb": "September 2023",
+           "en": "September 2023"
+        },
+        {
+           "lb": "Neie Layout",
+           "en": "New layout"
+        },
+        {
+           "lb": "August 2023",
+           "en": "August 2023"
+        },
+        {
+           "lb": "Nei Korrelatioun: Sprooch- & Educatiounsindex, deen de Variantegebrauch no enger Gewiichtung vun Däitschkompetenz (20 %), Franséischkompetenz (30 %) an Educatioun (50 %) klassifizéiert. Als e Beispiell weist d'Variabel 'Offizéiesch' wéi den Index d'Varianteverdeelung beaflosst, i.e. méi 'Offizéiesch' (a manner 'Offizéierin') wat den Index méi héich ass (= méi sproochlecht an Educatiounskapital).Kartéierung: Op deenen eenzelne Variantekaarte gëtt lo op der Basis vun der Gemeng kartéiert. Domat kritt een e méi detailéierten Iwwerbléck. D'Iwwerbléckskaart baséiert onverännert op der Verbreedung pro Kanton, wat e méi globalen Iwwerbléck erlaabt.",
+           "en": "New correlation: Language & Education Index, which classifies the use of variants according to a classification of German proficiency (20 %), French proficiency (30 %) and education (50 %). The variable “Offizéiesch” exemplifies how the index affects the variant distribution, i.e. the higher the index, the more “Offizéiesch” (and less “Offizéierin”) (= a higher level of language and education assets). Mapping: The individual map variants are now categorised by municipality, which allows for a more detailed perspective. The overview map is still based on the distribution per canton, which provides a more global perspective."
+        },
+        {
+           "lb": "Abrëll 2023",
+           "en": "April 2023"
+        },
+        {
+           "lb": "Neie Kaartentyp 'no Alter', fir d'Verännerung an der Dialektlandschaft vun al op jonk ze weisen. D'Basis fir d'Kartéierung ass lo uniform de Kanton an net méi d'Gemeng. R Shiny-Code vum ganze Variatiounsatlas lo och op Github: https://github.com/PeterGilles/Variatiounsatlas",
+           "en": "New map type 'by age' to showcase the change in the dialect landscape between the older and younger generations. The basis for mapping is now consistently the canton and no longer the municipality. There is now also an R-Shiny code of the entire Language Variation Atlas on Github: https://github.com/PeterGilles/Variatiounsatlas"
+        },
+        {
+           "lb": "Mäerz 2023",
+           "en": "March 2023"
+        },
+        {
+           "lb": "Februar 2023",
+           "en": "February 2023"
+        },
+        {
+           "lb": "Nei Iwwersiicht iwwert déi generell Varianteverdeelung. Soziale Facteur 'Mammesprooch' agefüügt",
+           "en": "A new perspective regarding the general distribution of variants. Social factor: 'Mothertongue' added."
+        },
+        {
+           "lb": "Januar 2023",
+           "en": "January 2023"
+        },
+        {
+           "lb": "Dezember 2022",
+           "en": "December 2022"
+        },
+        {
+           "lb": "November 2022",
+           "en": "November 2022"
+        },
+        {
+           "lb": "Oktober 2022",
+           "en": "Oktober 2022"
+        },
+        {
+           "lb": "D'Iwwerbléckskaart an d'Variantekaarte kënne lo als Bild-Dateien (PNG) erofgeluede ginn. Infofënster: Wann d'Maus iwwert d'Iwwerbléckskaart beweegt gëtt, erschéngt eng Infofënster mat Detailer iwwert d'Varianteverdeelung fir dës Gemeng respektiv fir dëse Kanton.",
+           "en": "The overview map and the variant maps can now also be downloaded as PNG image files. Info window: When the mouse pointer hovers over the overview map, an info window opens containing all the detailed information on the distribution of variants for the municipality or canton in question"
+        },
+        {
+           "lb": "Opbau vum Atlas",
+           "en": "Design of the atlas"
+        },
+        {
+           "lb": "… an der Maach",
+           "en": "…in production"
+        },
+        {
+           "lb": "Iwwersiicht iwwer all Kaart am Atlas. Mam Link vun der Variable kann een direkt op d'Kaart sprangen.",
+           "en": "Overview of each map in the atlas. With the link of the variables, it is possible to access the map directly."
+        },
+        {
+           "lb": "Phenomeen aus dem Beräich 'Grammatik'",
+           "en": "Phenomenon from the field of 'grammar'"
+        },
+        {
+           "lb": "Variabel",
+           "en": "Variable"
+        },
+        {
+           "lb": "Offrokontext",
+           "en": "Offro context"
+        },
+        {
+           "lb": "Analyséiert Varianten",
+           "en": "Analysed variants"
+        },
+        {
+           "lb": "Heefegst Variant",
+           "en": "Most frequent variant"
+        },
+        {
+           "lb": "Schnëssen-Item",
+           "en": "Schnëssen item"
+        },
+        {
+           "lb": "Ausgewäert Realiséierungen",
+           "en": "Selected findings"
+        },
+        {
+           "lb": "Varianteverdeelung",
+           "en": "Distribution of variants"
+        },
+        {
+           "lb": "Kartografie",
+           "en": "Cartography"
+        },
+        {
+           "lb": "Iwwerbléckskaart",
+           "en": "Overview map"
+        },
+        {
+           "lb": "Kaarten nom Alter",
+           "en": "Maps by age"
+        },
+        {
+           "lb": "Variantekaarten",
+           "en": "Variant maps"
+        },
+        {
+           "lb": "Sozialdaten",
+           "en": "Social data"
+        },
+        {
+           "lb": "Alter",
+           "en": "Age"
+        },
+        {
+           "lb": "Geschlecht",
+           "en": "Gender"
+        },
+        {
+           "lb": "Dialektgebiet",
+           "en": "Dialect region"
+        },
+        {
+           "lb": "Ausbildung",
+           "en": "Education"
+        },
+        {
+           "lb": "Kompetenz Däitsch",
+           "en": "German proficiency"
+        },
+        {
+           "lb": "Kompetenz Franséisch",
+           "en": "French proficiency"
+        },
+        {
+           "lb": "Sproochlech Aflëss",
+           "en": "Linguistic influences"
+        },
+        {
+           "lb": "Logistesch Regressioun",
+           "en": "Logistic regression"
+        },
+        {
+           "lb": "Sozio-demografie vun der Gemeng",
+           "en": "Socio-demographics of the municipality"
+        },
+        {
+           "lb": "Urbanisatioun",
+           "en": "Urbanisation"
+        },
+        {
+           "lb": "Awunner_km2",
+           "en": "Inhabitants_km2"
+        },
+        {
+           "lb": "Indice socio-économique",
+           "en": "Socio-economic index"
+        },
+        {
+           "lb": "Immigratioun",
+           "en": "Immigration"
+        },
+        {
+           "lb": "Audioopnamen",
+           "en": "Audio recordings"
+        },
+        {
+           "lb": "Impressium & Merci",
+           "en": "Imprint & Thanks"
+        },
+        {
+           "lb": "Realiséiert ass dëse Site mam shinydashboard am R. All Grafiken an Tabelle ginn dynamesch generéiert a kënne sou zu all Moment och mat neien Date gefiddert ginn. En décke Merci un de Bruno Rodrigues fir seng Hëllef beim R & Shiny! D'Audioopname goufe manuell ausgewäert a klassifizéiert vun: Studenten op der Uni Lëtzebuerg, Participante*Participanteën an de Schnëssen-Workshoppen, eisen Hiwien (L. Werdel, N. Roettgers, L. Blum, D. Muller, J. Oestreicher, P. Breser), dem S. Schmit, G. Forster an der Schnëssen-Equipe. En décke Merci och un si all!",
+           "en": "This page was created with shinydashboard in R. All graphics and tables are generated dynamically and can therefore be updated with new data at any time. A big thank you to Bruno Rodrigues for his help with R & Shiny! The audio recordings were manually analysed and classified by students of the University of Luxembourg, participants of the Schnëssen workshops, our hiwis (L. Werdel, N. Roettgers, L. Blum, D. Muller, J. Oestreicher, P. Breser), S. Schmit, G. Forster and the Schnëssen team. Our  sincere gratitude to all of them!"
+        },
+        {
+           "lb": "D'Schnëssen-Ekipp",
+           "en": "The Schnëssen team"
+        },
+        {
+           "lb": "bis 2022",
+           "en": "until 2022"
+        },
+        {
+           "lb": "bis 2020",
+           "en": "until 2020"
+        },
+        {
+           "lb": "Grammatik",
+           "en": "Grammar"
+        },
+        {
+           "lb": "Variabel:",
+           "en": "Variable:"
+        },
+        {
+           "lb": "Offrokontext:",
+           "en": "Offro context:"
+        },
+        {
+           "lb": "Analyséiert Varianten:",
+           "en": "Analaysed variants:"
+        },
+        {
+           "lb": "Heefegst Variant:",
+           "en": "Most frequent variant:"
+        },
+        {
+           "lb": "Schnëssen-Item:",
+           "en": "Schnëssen item:"
+        },
+        {
+           "lb": "Ausgewäert Realiséierungen:",
+           "en": "Selected findings:"
+        },
+        {
+           "lb": "← Manner",
+           "en": "← Less"
+        },
+        {
+           "lb": "Gläich",
+           "en": "Soon"
+        },
+        {
+           "lb": "Méi →",
+           "en": "More →"
+        },
+        {
+           "lb": "Warscheinlechkeet vum Gebrauch vun der Variant",
+           "en": "Probability of the variant's usage" 
+        },
+        {
+           "lb": "Geschate Relatioun tëscht sozial Facteuren an der Warscheinlechkeet fir de Gebrauch vun der Variant",
+           "en": "Estimated correlation between social factors and the probability of the variant's usage"    
+        },
+        {
+           "lb": "Baséiert op dem 'Degree of Urbanisation' (DEGRUBA). 1 = staark urbaniséiert (= d'Stad Lëtzebuerg), 3 = wéineg urbaniséiert Source: STATEC (https://statistiques.public.lu/en/themes/population-emploi.html)",
+           "en": "Based on the 'degree of urbanisatio' (DEGRUBA). 1 = highly urbanised (= Luxembourg City), 3 = less urbanised Source: STATEC (https://statistiques.public.lu/en/themes/population-emploi.html)" 
+        },
+        {
+           "lb": "Gemëttelt aus Kompetenz D + F.",
+           "en": "Averaged from competence D + F."
+        },
+        {
+           "lb": "Sproochekompetenz",
+           "en": "Language skills"
+        },
+        {
+           "lb": "Mammesproch",
+           "en": "Mother tongue"
+        },
+        {
+           "lb": "Baséiert op Selbstschätzung",
+           "en": "Based on self-estimation"
+        },
+        {
+           "lb": "Baséiert op Selbstaschätzung. 1 = bal guer keng Kompetenz, 7 = perfekt Kompetenz. Fir d'Interpretatioun si just d'Stufe vu 5 bis 7 reliabel.",
+           "en": "Based on self-estimation. 1 = almost no competence, 7 = perfect competence. Only levels 5 to 7 are relevant for interpretation."
+        },
+        {
+           "lb": "Kompetenz am Däitschen",
+           "en": "German proficiency"
+        },
+        {
+           "lb": "Kompetenz am Franséischen",
+           "en": "French proficiency"
+        },
+        {
+           "lb": "Baséiert op dem 'Indice socio-économique' pro Gemeng.",
+           "en": "Based on the 'socio-economic index' per municipality."
+        },
+        {
+           "lb": "Source: STATEC (https://statistiques.public.lu/dam-assets/catalogue-publications/bulletin-Statec/2017/bulletin-2-17.pdf)",
+           "en": "Source: STATEC (https://statistiques.public.lu/dam-assets/catalogue-publications/bulletin-Statec/2017/bulletin-2-17.pdf)"
+        },
+        {
+           "lb": "Prozentzuel vun Net-Lëtzebuerger pro Gemeng Source: STATEC: https://data.public.lu/en/datasets/population-de-residence-habituelle-par-commune-et-nationalite-au-1er-fevrier-2011/",
+           "en": "Percentage of non-Luxembourgish citizens per municipality Source: STATEC: https://data.public.lu/en/datasets/population-de-residence-habituelle-par-commune-et-nationalite-au-1er-fevrier-2011/"
+        }
+]
+}

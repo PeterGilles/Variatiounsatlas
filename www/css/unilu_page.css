@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap');
+
+
+
+p, li {
+    font-family: Noto Sans, sans-serif;
+    font-size: 1rem;
+    text-align: left;
+    line-height: 1.5;
+}
+
+em {
+    color: var(--bs-danger);
+}
+
+.card-text {
+    font-family: Noto Sans, sans-serif;
+    font-size: 1rem;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.card_features {
+    border-width: 10px;
+    border-color: var(--bs-danger);
+
+}
+
+.card_plot {
+    border-width: 0px;
+    border-color: var(--bs-danger);
+
+}
+
+
+.card_features:hover {
+    border-color: var(--bs-gray-dark);
+    box-shadow: 10px;
+}
+
+.card-header {
+    font-family: Barlow Condensed, sans-serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    text-align: left;
+    line-height: 1.2;
+}
+
+.caption {
+    font-size: 8pt;
+    color:rgb(0, 0, 0);
+}
+
+.my_select {
+    outline: none;
+
+}
+
+.my_select .selectize-input {
+    font-family: Noto Sans, sans-serif;
+    font-size: 1rem;
+    line-height: 2;   
+    text-align: left;
+    border-radius: 0;
+    border-width: 4px;
+    border-color: var(--bs-danger);
+}
+
+.my_select .selectize-dropdown-content > .option {
+    font-family: Noto Sans, sans-serif;
+    font-weight: 500;
+    text-align: left;
+    line-height: 2;   
+}
+
+.my_select .selectize-dropdown .selected {
+    background-color: var(--bs-danger);
+    color: #fff
+}

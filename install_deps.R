@@ -1,0 +1,21 @@
+install.packages(
+  c(
+    "DT",
+    "bslib",
+    "fontawesome",
+    "ggiraph",
+    "googlesheets4",
+    "qs",
+    "shinycssloaders",
+    "shiny.router",
+    "waiter",
+    "dplyr",
+    "ggplot2",
+    "purrr",
+    "magrittr",
+    "mapproj",
+    "patchwork",
+    "tidyr",
+    "stringr",
+    "forcats"
+)

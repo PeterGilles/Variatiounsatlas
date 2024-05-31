@@ -1,0 +1,58 @@
+/* custom.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;500&display=swap');
+
+.navbar {
+
+background-color: var(--bs-gray-dark);
+
+}
+
+.navbar-brand {
+    font-family: 'Barlow', sans-serif;
+    color: white;
+}
+
+
+.navbar-nav {
+    height: 4rem;
+    font-family: 'Barlow', sans-serif;
+}
+
+.nav-link {
+    color: white;
+    line-height: 4rem;
+    position: relative;
+    transition: 0.2s;
+}
+
+.nav-link:hover {
+    background-color: var(--bs-white);
+    color: black;
+}
+
+.nav-link.disabled {
+    color: transparent;
+}
+
+.nav-link::after{
+
+    content: "";
+    width: 0%;
+    height: 5px;
+    background-color: var(--bs-red);
+    position: absolute;
+    left:50%;
+    bottom:0%;
+    transition: 0.3s;
+    transition-delay: 0.1s;
+    transform: translateX(-50%);
+}
+
+.nav-link.active::after{
+    width: 80%;
+}
+
+.nav-link:hover::after{
+    width: 80%;
+}

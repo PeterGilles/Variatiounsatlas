@@ -1,5 +1,0 @@
-/* Set default font size for Markdown elements */
-body, p, li {
-  font-family: "Roboto", sans-serif;
-  font-size: 16px; /* Change this value to your desired font size */
-}

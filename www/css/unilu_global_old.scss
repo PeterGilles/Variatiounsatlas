@@ -1,0 +1,269 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;500;700&display=swap');
+
+
+/* fonts ---------------------------- */
+
+$uni-font-condensed: 'Barlow Condensed', sans-serif;
+$uni-font-title: 'Barlow', sans-serif;
+$uni-font-body: 'Noto Sans', sans-serif;
+$body-text: 0.85 * $h6-font-size;
+
+
+/* Global styles ---------------------------- */
+
+body, p {
+    font-family: $uni-font-body;
+    font-size: $spacer;
+    text-align: left;
+    line-height: $line-height-base;
+    font-size: $body-text;
+    color: $gray-600;
+}
+
+em {
+    color: $danger;
+}
+
+.caption {
+    font-size: $font-size-sm;
+    color: $gray-600;
+}
+
+
+/* Titles ---------------------------- */
+
+#uni_title_small {
+ font-family: $uni-font-title; 
+ font-size: $h5-font-size;
+ font-weight: $font-weight-bold;
+ color: $danger;
+}
+
+#uni_title_large {
+ font-family: $uni-font-title; 
+ font-size: 2 * $h3-font-size;
+ font-weight: $font-weight-bold;
+ color: $black;
+}
+
+
+/* Navbar ---------------------------- */
+
+.uni-topnav-brand {
+    @extend .navbar-brand;
+    font-family: $uni-font-condensed;
+    font-size: $h4-font-size;
+    color: $secondary;
+}
+
+.uni-topnav-nav {
+    @extend .navbar-nav;
+    font-family: $uni-font-condensed;
+    height: 4 * $spacer;
+}
+
+.uni-topnav-link {
+    @extend .nav-link;
+    color: $secondary;
+    line-height: 4 * $spacer;
+    position: relative;
+    transition: 0.2s;
+}
+
+.uni-topnav-link:hover {
+    background-color: $white;
+    color: $primary;
+}
+
+.uni-topnav-link.active {
+    background-color: $white;
+    color: $warning;
+}
+
+.uni-topnav-link.disabled {
+    color: transparent;
+}
+
+.uni-topnav-link::after{
+    content: "";
+    width: 0%;
+    height: 5px;
+    background-color: $danger;
+    position: absolute;
+    left:50%;
+    bottom:0%;
+    transition: 0.3s;
+    transition-delay: 0.1s;
+    transform: translateX(-50%);
+}
+
+.uni-topnav-link.active::after{
+    width: 80%;
+}
+
+.uni-topnav-link:hover::after{
+    width: 80%;
+}
+
+/* Card Features ---------------------------- */
+
+.uni-card-feature {
+    @extend .card;
+    border-color: $danger;
+    border-radius: 0;
+    border-width: 0;
+    border-top-width: 10px;
+    border-left-width: 10px;
+    box-shadow: $box-shadow-sm;
+}
+
+.uni-card-feature-header {
+    @extend .card-header;
+    font-family: $uni-font-condensed;
+    font-size: $h4-font-size;
+    font-weight: $font-weight-bold;
+    line-height: $line-height-sm;
+    border-color: $danger;   
+    background-color: $white;
+    text-align: left;
+}
+
+.uni-card-feature-body {
+    @extend .card-body;
+}
+
+.uni-card-feature-text {
+    @extend .card-text;
+    @extend body;
+}
+
+
+/* Cards ---------------------------- */
+
+
+.uni-card {
+    @extend .card;
+    // margin-right: 2 * $spacer;    
+    border-color: $danger;
+    border-radius: 0;
+    border-width: 1;
+    box-shadow: $box-shadow-sm;
+}
+
+.uni-card-header {
+    @extend .card-header;
+    font-family: $uni-font-body;
+    font-size: $h5-font-size;
+    font-weight: $font-weight-bold;
+    line-height: $line-height-sm;
+    border-color: $danger;   
+    background-color: $secondary;
+    text-align: left;
+}
+
+.uni-card-body {
+    @extend .card-body;
+    overflow: hidden
+
+}
+
+.uni-card-text {
+    @extend .card-text;
+}
+
+
+/* Card tabs ---------------------------- */
+
+.card.bslib-card {
+    @extend .uni-card;
+    // margin-right: 3 * $spacer;
+
+}
+
+.card-header.bslib-navs-card-title {
+    @extend .uni-card-header;
+
+
+}
+
+#uni_card_tab .nav-link {
+    border-color: $danger;
+    border-bottom-width: 0;
+    font-family: $uni-font-body;
+    font-weight: 300;
+    font-size: large;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+}
+
+
+
+/* Button ---------------------------- */
+
+.btn.btn-outline-danger {
+    font-family: $uni-font-condensed;
+    font-weight: $font-weight-bold;
+    font-size: $h5-font-size;
+    color: $dark;
+}
+
+.btn.btn-outline-danger:hover {
+    color: $white;
+}
+
+/* Bookmark ---------------------------- */
+
+.uni_bookmark {
+    font-family: $uni-font-condensed;
+    font-weight: $font-weight-bold;
+    font-size: $h5-font-size;
+    background-color: $danger;
+}
+
+._bookmark_:hover {
+    color: $white;
+    border-color: $danger;
+    border-width: 1;
+}
+
+
+/* Sidebar ---------------------------- */
+
+.uni_kaart_select {
+    outline: none;
+
+}
+
+#variable-label {
+    margin-bottom: .5rem;
+    font-family: $uni-font-condensed;
+    font-weight: $font-size-base;
+}
+
+.uni_kaart_select .selectize-input {
+    font-family: $uni-font-body;
+    font-size: $font-size-base;
+    line-height: 2 * $spacer;
+    text-align: left;
+    border-radius: 0;
+    border-width: 1px;
+    border-color: $danger;
+}
+
+.uni_kaart_select .selectize-dropdown-content > .option {
+    font-family: $uni-font-body;
+    font-weight: $font-size-base;
+    text-align: left;
+    line-height: $line-height-base; 
+}
+
+.uni_kaart_select .selectize-dropdown-content {
+    max-height: 50vh;
+}
+
+.uni_kaart_select .selectize-dropdown .selected {
+    background-color: $danger;
+    color: $white
+}

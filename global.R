@@ -1,37 +1,41 @@
-library(tidyverse)
-options("sp_evolution_status"=2)
-library(sp)
-library(sf)
-library(cowplot) # creates too large objects! used for ggdraw
-library(patchwork) # smaller objects
-library(scales)
-library(jpeg)
-library(magick) # for LSA maps
-library(raster)
-library(mapproj)
+library(dplyr)
+library(ggplot2)
+library(purrr)
+library(magrittr)
+library(tidyr)
+library(stringr)
+library(forcats)
 library(DT)
-#library(googlesheets4)
 library(waiter)
 library(qs)
-library(bslib)
+library(bslib) # is also loaded in ui.R ?!
 library(shinycssloaders)
 library(markdown)
 library(ggiraph)
-library(gfonts)
-library(googlesheets4)
-library(fontawesome)
-library(randomForest)
-library(party)
-library(lme4)
-library(broom)
+library(mapproj)
+library(patchwork) # smaller objects
+library(shiny.i18n)
+
+# activate these for the creation of maps
+#library(gfonts)
+#library(raster)
+#options("sp_evolution_status"=2)
+#library(sp)
+#library(sf)
+#library(cowplot) # creates too large objects! used for ggdraw
+#library(jpeg)
+#library(magick) # for LSA maps
+#library(scales)
 
 # on Ubuntu/engelmann, install packages with:
 # sudo su - -c "R -e \"install.packages('party', repos='http://cran.rstudio.com/')\""
 
+enableBookmarking(store = "url")
+
  
 ## Some settings
 # 1. load paths externally
-paths <- rio::import("paths.csv")
+paths <- rio::import("paths/paths.csv")
 SERVER_local <- filter(paths, name == "SERVER_local") %>%
   dplyr::select(path) %>%
   as.character()
@@ -87,8 +91,9 @@ preloader <- list(html = tagList(spin_1(), "De Variatiounsatlas gëtt gelueden .
 #saveRDS(shapefile_df, "communes_df.RDS")
 
 # load prepared polygon data for cantons and communes
-cantons_df <- readRDS("cantons_df.RDS")
-communes_df <- readRDS("communes_df.RDS")
+cantons_df <- readRDS("seed/cantons_df.RDS")
+communes_df <- readRDS("seed/communes_df.RDS")
+Gemengen_Statistiken <- qread("seed/Gemengen_Statistiken.qs")
 
 # Weider Elementer fir d'Kaartéierung
 # rivers <- readRDS("river.RDS")
@@ -103,7 +108,12 @@ communes_df <- readRDS("communes_df.RDS")
 
 color_palette <- c('#56cc9d','#beaed4','#fdc086','#ffff99','#386cb0','#f0027f','#bf5b17','#666666')
 
-# update Kaartesettings from Google Docs    
+# Internationalisation
+i18n <- Translator$new(translation_json_path='translations/translation.json')
+i18n$set_translation_language('lb')
+
+# update Kaartesettings from Google Docs  
+# library(googlesheets4)
 # gs4_deauth()
 # variables <- range_read(ss = "1IDtvxHgccWg2JMu-dqJyqsCpwsurpYLOgm6rfE0mMGU", sheet = "kaartesettings", col_names=T, col_types = "c") %>%
 #  filter(active == "yes") %>%
@@ -111,7 +121,7 @@ color_palette <- c('#56cc9d','#beaed4','#fdc086','#ffff99','#386cb0','#f0027f','
 #   write_csv(file = "./Variatiounsatlas/kaartesettings.csv")
 
 # load Kaartesettings from local csv
-variables <- read.csv("kaartesettings.csv") %>%
+variables <- read.csv("seed/kaartesettings.csv") %>%
   filter(active == "yes") %>%
   arrange(map_category, input_choice, .locale = "de")
 
@@ -204,9 +214,10 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
   p <-  ggplot() +
   # variant data
   geom_polygon_interactive(data = dataset, aes(x = long, y = lat, fill=max_variant, group = id,
-                                               tooltip = paste0("Lokalitéit: ", id, "\nHeefegst Variant: ", max_variant,
-                                                                "\nRelativ Heefegkeet: ", round(freq, 2)*100,
-                                                                " %\nParticipanten: ", n)),
+                                               tooltip = paste0(i18n$t("Lokalitéit: "), id, 
+                                                                       i18n$t("\nHeefegst Variant: "), max_variant,
+                                                                       i18n$t("\nRelativ Heefegkeet: "), round(freq, 2)*100,
+                                                                              i18n$t(" %\nParticipanten: "), n)),
                            # alpha per polygon steered by percentage, if not useful, set alpha back to 0.8
                            linewidth=0, alpha = dataset$prozent) +
     # add Rivers
@@ -221,10 +232,10 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
     scale_colour_identity() +
     scale_fill_manual(values = color[1:color_num],
                       breaks = selection) +
-    labs(title = paste("Variabel: ", word(map_title, 2, sep="_")),
-         fill = paste0("Haaptvariant\npro ", word(geo_type, 1, sep = "_")),
+    labs(title = paste(i18n$t("Variabel: "), word(map_title, 2, sep="_")),
+         fill = paste0(i18n$t("Haaptvariant\npro "), word(geo_type, 1, sep = "_")),
          x = "", y = "",
-         caption = paste0(variant_count, " Participanten | Klengst Polygoner: ", word(geo_type, 1, sep = "_"), "\n© Uni Lëtzebuerg | generéiert ", date())
+         caption = paste0(variant_count, i18n$t(" Participanten | Klengst Polygoner: "), word(geo_type, 1, sep = "_"), i18n$t("\n© Uni Lëtzebuerg | generéiert "), date())
     ) +
     #theme_void(base_family = "sans") +
     theme_void() +
@@ -242,7 +253,7 @@ make_summary_plot <- function(dataset, lsa_map_number, selection, color_num, map
     #lsa <- readJPEG(source =  paste0("atlas/Kaarten-LSA_small/", lsa_map_number, "_lux.jpg"))
     lsa <- readJPEG(source = paste0("./Kaarten-LSA_small/", lsa_map_number, "_lux.jpg"))
     lsa <- ggdraw() + draw_image(lsa) +
-      labs(caption =paste0("Vergläichskaart aus dem 'Luxemburgischer Sprachatlas', LSA (1963), Kaart ", lsa_map_number)) +
+      labs(caption =paste0(i18n$t("Vergläichskaart aus dem 'Luxemburgischer Sprachatlas', LSA (1963), Kaart "), lsa_map_number)) +
       theme_void() +
       theme(plot.caption = element_text(size=26))
     
@@ -291,14 +302,6 @@ make_summary_plot_age <- function(dataset, lsa_map_number, selection, color_num,
   freq_alter <- variant_count1 %>%
     group_by(Alter) %>%
     summarise(freq_alter = sum(total))
-  
-  #print(freq_alter)
-  # # A tibble: 3 × 2
-  # Alter     freq_alter
-  # <fct>          <int>
-  #   1 eeler            144
-  # 2 mëttel-al        233
-  # 3 jonk             234
 
   # define a function to create the labels
   my_labeller <- function(value) {
@@ -411,7 +414,6 @@ plot_social_categories <- function(data, social_category, variable, selection, c
     group_by({{social_category}}) %>%
     mutate(Prozent_social_category = sum(Prozent_variable))
   
-  
   #bar_df$w <- cumsum(bar_df$total)
   #bar_df$wm <- bar_df$w - bar_df$total
   #bar_df$wt <- with(bar_df, wm + (w - wm)/2)
@@ -440,6 +442,9 @@ plot_social_categories <- function(data, social_category, variable, selection, c
   # 3 Weiblech   lo[g]ie             95   726  0.131 
   # 4 Weiblech   lo[ʒ]ie            631   726  0.869 
   
+  xlabel <- as.character(ensym(social_category))
+  #print(xlabel)
+  
   # Stacked barplot with multiple groups
   bar <- ggplot(data=bar_df, aes(x= {{social_category}}, y = Prozent, fill = variable, label = count_variant), alpha = 0.9) +
     geom_col(position = position_stack()) +
@@ -455,14 +460,13 @@ plot_social_categories <- function(data, social_category, variable, selection, c
     scale_y_continuous(labels = scales::percent_format()) +
     scale_fill_manual(values = color[1:length(selection)], breaks = selection) +
     theme_minimal() +
+    labs(x = i18n$t(xlabel)) +
     theme(legend.text = element_text(size=14),
           legend.position="bottom",
           legend.title = element_blank(),
           plot.caption = element_text(size = 11),
           axis.title = element_text(size=15),
           axis.text = element_text(size=14))
-  
-  #qsave(bar, "bar.qs")
   
   return(bar)
 }
@@ -480,11 +484,6 @@ plot_decision_tree <- function(data, variable, selection) {
     dplyr::filter(n()/nrow(data) >= 0.04) %>%
     ungroup()
   
-  # tab <- cond_df %>%
-  #   group_by(variable) %>%
-  #   count(variable, name = "count_variant") 
-  # print(tab)
-  
   cond_df[sapply(cond_df, is.character)] <- lapply(cond_df[sapply(cond_df, is.character)], as.factor)
   
   # age as ordered factor
@@ -492,16 +491,11 @@ plot_decision_tree <- function(data, variable, selection) {
   cond_df$Alter <- factor(cond_df$Alter,
                             ordered = is.ordered(ageorder))
   
-  # # mutate Index in forest_df as ordered factor
-  # indexorder <- c("<= 0.4", "0.6", "0.8", "1")
-  # cond_df$Index <- factor(cond_df$Index,
-  #                           ordered = is.ordered(indexorder))
-  
   set.seed(1234)
   
-  cond_tree <- ctree(formula = variable ~ Alter + Geschlecht + Dialektgebiet + Däitsch + Franséisch + Ausbildung,
+  cond_tree <- party::ctree(formula = variable ~ Alter + Geschlecht + Dialektgebiet + Däitsch + Franséisch + Ausbildung,
                      data = cond_df,
-                     control = ctree_control(testtype = "Univariate", minbucket = 20))
+                     control = party::ctree_control(testtype = "Univariate", minbucket = 20))
   
   # plot tree
   plot(cond_tree)
@@ -534,11 +528,11 @@ plot_VariableImportance <- function(data, variable, selection) {
   #                           ordered = is.ordered(indexorder))
   
   # Random forest model
-  rf <- randomForest(variable ~ Alter + Geschlecht + Dialektgebiet + Däitsch + Franséisch + Ausbildung, 
+  rf <- randomForest::randomForest(variable ~ Alter + Geschlecht + Dialektgebiet + Däitsch + Franséisch + Ausbildung, 
                      data=forest_df, importance=TRUE, ntree=2000, keep.forest=FALSE)
   
   # plot Variable Importance
-  varImpPlot(rf, main = "Variable Importance", type = 1) # type = 1: mean decrease in accuracy
+  randomForest::varImpPlot(rf, main = "Variable Importance", type = 1) # type = 1: mean decrease in accuracy
   
   # save
   #qsave(plot, file = paste0(variable, "_VariableImportance.qs"))
